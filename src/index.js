@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
-import './index.css';
 import App from './App';
 
 const theme = createMuiTheme({
@@ -14,6 +13,9 @@ const theme = createMuiTheme({
     secondary: {
       main: '#008000'
     }
+  },
+  typography: {
+    fontFamily: 'Playfair Display',
   }
 });
 
