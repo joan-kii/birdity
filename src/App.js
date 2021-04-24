@@ -4,7 +4,6 @@ const App = () => {
   return (
     <>
       <Topbar />
-      Welcome to Birdity!
     </>
   );
 };

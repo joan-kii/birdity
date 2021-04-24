@@ -69,6 +69,7 @@ const Topbar = () => {
           </div>
           <div className={classes.rightSide}>
             <Button
+              data-testid='chatButton'
               variant='contained'
               color='primary'
               startIcon={<ChatIcon />}
@@ -78,6 +79,7 @@ const Topbar = () => {
               </Typography>
             </Button>
             <Button
+              data-testid='exploreButton'
               variant='contained'
               color='primary'
               startIcon={<ExploreIcon />}
