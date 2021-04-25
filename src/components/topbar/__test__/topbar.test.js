@@ -19,6 +19,7 @@ describe('Topbar Component', () => {
     render(<Topbar />);
     expect(screen.getByTestId('chatButton')).toHaveTextContent('Chat');
     expect(screen.getByTestId('exploreButton')).toHaveTextContent('Explore');
+    expect(screen.getByTestId('loginButton')).toHaveTextContent('Log In');
   });
 });
 

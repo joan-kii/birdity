@@ -7,8 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import ChatIcon from '@material-ui/icons/Chat';
 import ExploreIcon from '@material-ui/icons/Explore';
-import IconButton from '@material-ui/core/IconButton';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import AccountBoxIcon from '@material-ui/icons/AccountBox';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -16,6 +15,11 @@ const useStyles = makeStyles((theme) => ({
       flexGrow: 1,
       display: 'flex',
     },
+  appBar: {
+    zIndex: theme.zIndex.drawer + 1,
+    boxShadow: 'none',
+    borderBottom: 'solid 1px #e0e0e0',
+  },
   topbar: {
     justifyContent: 'space-between',
     background: theme.palette.common.white,
@@ -38,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
     textShadow: '5px 5px 10px #999',
     '&:hover': {
       textDecoration: 'none',
-      color: theme.palette.secondary.light,
+      color: theme.palette.primary.light,
       textShadow: '3px 3px 7px #999'
     }
   }, 
@@ -57,7 +61,7 @@ const Topbar = () => {
   
   return (
     <div className={classes.grow}>
-      <AppBar position='static'>
+      <AppBar position='static' className={classes.appBar}>
         <Toolbar className={classes.topbar}>
           <div className={classes.leftSide}>
             <Typography component={Link} className={classes.logo} to={'/'}>
@@ -88,9 +92,16 @@ const Topbar = () => {
                 Explore
               </Typography>
             </Button>
-            <IconButton>
-              <AccountCircleIcon />
-            </IconButton>
+            <Button
+              data-testid='loginButton'
+              variant='contained'
+              color='primary'
+              startIcon={<AccountBoxIcon />}
+              className={classes.button}>
+              <Typography>
+                Log In
+              </Typography>
+            </Button>
           </div>
         </ Toolbar>
       </ AppBar>
