@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -8,7 +8,10 @@ import Button from '@material-ui/core/Button';
 import ChatIcon from '@material-ui/icons/Chat';
 import ExploreIcon from '@material-ui/icons/Explore';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
+import Modal from '@material-ui/core/Modal'; 
 
+import { Context } from '../../context/Context';
+import SignUpForm from '../signUpForm/SignUpForm';
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -58,6 +61,17 @@ const useStyles = makeStyles((theme) => ({
 const Topbar = () => {
 
   const classes = useStyles();
+  const { openSignUpForm, setOpenSignUpForm } = useContext(Context);
+
+  const handleSignUp = () => {
+    setOpenSignUpForm(true);
+  };
+
+  const handleCloseSignUpForm = () => {
+    setOpenSignUpForm(false);
+  };
+
+  const renderSignUpForm = (<div><SignUpForm /></div>);
   
   return (
     <div className={classes.grow}>
@@ -97,7 +111,8 @@ const Topbar = () => {
               variant='contained'
               color='primary'
               startIcon={<AccountBoxIcon />}
-              className={classes.button}>
+              className={classes.button}
+              onClick={handleSignUp}>
               <Typography>
                 Sign Up / Log In
               </Typography>
@@ -105,6 +120,13 @@ const Topbar = () => {
           </div>
         </ Toolbar>
       </ AppBar>
+      <Modal
+        open={openSignUpForm}
+        onClose={handleCloseSignUpForm}
+        aria-labelledby='modal-title'
+        aria-describedby='modal-descrition'>
+        {renderSignUpForm}
+      </Modal>
     </div>
   )
 };
