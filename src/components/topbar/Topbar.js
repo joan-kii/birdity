@@ -49,8 +49,8 @@ const useStyles = makeStyles((theme) => ({
   slogan: {
     color: theme.palette.primary.light,
     cursor: 'default',
-    marginLeft: '0.5em',
-    marginBottom: '0.9em',
+    marginLeft: '0.6em',
+    marginBottom: '0.7em',
     alignSelf: 'end',
   }
 }));
@@ -99,7 +99,7 @@ const Topbar = () => {
               startIcon={<AccountBoxIcon />}
               className={classes.button}>
               <Typography>
-                Log In
+                Sign Up / Log In
               </Typography>
             </Button>
           </div>

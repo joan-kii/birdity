@@ -15,7 +15,7 @@ const theme = createMuiTheme({
     }
   },
   typography: {
-    fontFamily: 'Playfair Display',
+    fontFamily: 'Merriweather',
   }
 });
 
