@@ -81,7 +81,10 @@ const Topbar = () => {
             <Typography component={Link} className={classes.logo} to={'/'}>
               Birdity
             </Typography>
-            <Typography className={classes.slogan}>
+            <Typography 
+              variant='body2' 
+              component='h1' 
+              className={classes.slogan}>
               The Birdwatching Social Network
             </Typography>
           </div>
