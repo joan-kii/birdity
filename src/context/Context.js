@@ -10,8 +10,10 @@ export const useAuth = () => {
 const ContextProvider = (props) => {
   
   const [openSignUpForm, setOpenSignUpForm] = useState(false);
+  const [openLogInForm, setOpenLogInForm] = useState(false);
   const value = {
-    openSignUpForm, setOpenSignUpForm
+    openSignUpForm, setOpenSignUpForm,
+    openLogInForm, setOpenLogInForm,
   };
 
   return (

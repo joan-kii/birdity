@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Container from '@material-ui/core/Container';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -14,6 +14,8 @@ import TwitterIcon from '@material-ui/icons/Twitter';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Alert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles'; 
+
+import { Context } from '../../context/Context';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -52,12 +54,13 @@ const useStyles = makeStyles((theme) => ({
 const LogInForm = () => {
 
   const classes = useStyles();
+  const { setOpenLogInForm, setOpenSignUpForm } = useContext(Context);
 
-  /* const toggleModal = () => {
+  const toggleModal = () => {
     setOpenSignUpForm(true);
     setOpenLogInForm(false);
   };
- */
+
   return (
     <Container>
       <Paper className={classes.paper}>
@@ -126,7 +129,7 @@ const LogInForm = () => {
               <Link 
                 variant='subtitle1'
                 className={classes.text}
-                /* onClick={toogleModal} */>
+                onClick={toggleModal}>
                   Need an account? Sign up.
                 </Link>
             </Grid>

@@ -12,6 +12,7 @@ import Modal from '@material-ui/core/Modal';
 
 import { Context } from '../../context/Context';
 import SignUpForm from '../signUpForm/SignUpForm';
+import LogInForm from '../logInForm/LogInForm';
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -61,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
 const Topbar = () => {
 
   const classes = useStyles();
-  const { openSignUpForm, setOpenSignUpForm } = useContext(Context);
+  const { openSignUpForm, setOpenSignUpForm, openLogInForm, setOpenLogInForm } = useContext(Context);
 
   const handleSignUp = () => {
     setOpenSignUpForm(true);
@@ -71,7 +72,12 @@ const Topbar = () => {
     setOpenSignUpForm(false);
   };
 
+  const handleCloseLogInForm = () => {
+    setOpenLogInForm(false);
+  };
+
   const renderSignUpForm = (<div><SignUpForm /></div>);
+  const renderLogInForm = (<div><LogInForm /></div>);
   
   return (
     <div className={classes.grow}>
@@ -129,6 +135,13 @@ const Topbar = () => {
         aria-labelledby='modal-title'
         aria-describedby='modal-descrition'>
         {renderSignUpForm}
+      </Modal>
+      <Modal
+        open={openLogInForm}
+        onClose={handleCloseLogInForm}
+        aria-labelledby='modal-title'
+        aria-describedby='modal-descrition'>
+        {renderLogInForm}
       </Modal>
     </div>
   )

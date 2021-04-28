@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Container from '@material-ui/core/Container';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -14,6 +14,8 @@ import TwitterIcon from '@material-ui/icons/Twitter';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Alert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles'; 
+
+import { Context } from '../../context/Context';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -52,6 +54,12 @@ const useStyles = makeStyles((theme) => ({
 const SignUpForm = () => {
 
   const classes = useStyles();
+  const { setOpenLogInForm, setOpenSignUpForm} = useContext(Context);
+
+  const toggleModal = () => {
+    setOpenLogInForm(true);
+    setOpenSignUpForm(false);
+  };
 
   return (
     <Container>
@@ -129,7 +137,8 @@ const SignUpForm = () => {
             <Grid item>
               <Link 
                 variant='subtitle1'
-                className={classes.text}>
+                className={classes.text}
+                onClick={toggleModal}>
                   Already have an account? Log in.
                 </Link>
             </Grid>
