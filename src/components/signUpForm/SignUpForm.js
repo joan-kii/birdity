@@ -68,11 +68,11 @@ const SignUpForm = () => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography
-        variant='h2'
-        component='h4'
-        className={classes.title}
-        color='primary'>
-          Sign Up
+          variant='h2'
+          component='h4'
+          className={classes.title}
+          color='primary'>
+            Sign Up
         </Typography>
         <form className={classes.form}>
           <Grid container spacing={4}>
@@ -80,14 +80,19 @@ const SignUpForm = () => {
               <ButtonGroup variant='contained'
                 size='large' 
                 aria-label='contained button group'>
-                <Button endIcon={<FacebookIcon />}>
+                <Button 
+                  data-testid='facebookSignUpButton'
+                  endIcon={<FacebookIcon />}>
                   Sign Up with Facebook
                 </Button>
-                <Button startIcon={<TwitterIcon />}>
+                <Button 
+                  data-testid='twitterSignUpButton'
+                  startIcon={<TwitterIcon />}>
                   Sign Up with Twitter
                 </Button>
               </ButtonGroup>
               <Button
+                data-testid='googleSignUpButton'
                 variant='contained'
                 className={classes.googleButton}
                 size='large'
@@ -126,6 +131,7 @@ const SignUpForm = () => {
             </Grid>
           </Grid>
           <Button 
+            data-testid='emailSignUpButton'
             type='submit'
             className={classes.button}
             variant='contained'
