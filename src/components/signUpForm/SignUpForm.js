@@ -105,6 +105,7 @@ const SignUpForm = () => {
             <Grid item xs={12}>
               <TextField required
                 id='email'
+                data-testid='email'
                 type='email'
                 fullWidth
                 label='Email'
@@ -114,6 +115,7 @@ const SignUpForm = () => {
             <Grid item xs={12}>
               <TextField required
                 id='password'
+                data-testid='password'
                 type='password'
                 fullWidth
                 label='Password'
@@ -123,6 +125,7 @@ const SignUpForm = () => {
             <Grid item xs={12}>
               <TextField required
                 id='confirmPassword'
+                data-testid='confirmPassword'
                 type='password'
                 fullWidth
                 label='Confirm Password'

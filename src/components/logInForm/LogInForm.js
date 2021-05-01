@@ -80,14 +80,19 @@ const LogInForm = () => {
               <ButtonGroup variant='contained'
                 size='large' 
                 aria-label='contained button group'>
-                <Button endIcon={<FacebookIcon />}>
+                <Button 
+                  data-testid='facebookLogInButton'
+                  endIcon={<FacebookIcon />}>
                   Log in with Facebook
                 </Button>
-                <Button startIcon={<TwitterIcon />}>
+                <Button 
+                  data-testid='twitterLogInButton'
+                  startIcon={<TwitterIcon />}>
                   Log in with Twitter
                 </Button>
               </ButtonGroup>
               <Button
+                data-testid='googleLogInButton'
                 variant='contained'
                 className={classes.googleButton}
                 size='large'
@@ -99,6 +104,7 @@ const LogInForm = () => {
             </Grid>
             <Grid item xs={12}>
               <TextField required
+                data-testid='email'
                 id='email'
                 type='email'
                 fullWidth
@@ -108,6 +114,7 @@ const LogInForm = () => {
             </Grid>
             <Grid item xs={12}>
               <TextField required
+                data-testid='password'
                 id='password'
                 type='password'
                 fullWidth
@@ -117,6 +124,7 @@ const LogInForm = () => {
             </Grid>
           </Grid>
           <Button 
+            data-testid='emailLogInButton'
             type='submit'
             className={classes.button}
             variant='contained'

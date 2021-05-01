@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom/extend-expect';
 
 import SignUpForm from '../SignUpForm';
@@ -33,10 +34,28 @@ describe('Sign Up Modal', () => {
     expect(screen.getByTestId('emailSignUpButton')).toHaveTextContent('Sign Up');
   });
 
-  /* test('text fields renders fine', () => {
+  test('text fields renders fine', () => {
     render(renderSignUpModal);
-    expect(screen.getBy('Email')).toBeInTheDocument();
-    expect(screen.getByLabelText('Password')).toBeInTheDocument();
-    expect(screen.getByLabelText('Confirm Password')).toBeInTheDocument();
-  }) */
-})
+    
+    const emailField = screen.getByTestId('email');
+    const emailFake = 'test@test.com';
+    const passwordField = screen.getByTestId('password');
+    const passwordFake = '123456';
+    const confirmPasswordField = screen.getByTestId('confirmPassword');
+
+    expect(emailField).toBeInTheDocument();
+    userEvent.type(emailField.children[1].children[0], emailFake);
+    expect(emailField.children[1].children[0]).toHaveAttribute('type', 'email');
+    expect(emailField.children[1].children[0]).toHaveValue(emailFake);
+
+    expect(passwordField).toBeInTheDocument();
+    userEvent.type(passwordField.children[1].children[0], passwordFake);
+    expect(passwordField.children[1].children[0]).toHaveAttribute('type', 'password');
+    expect(passwordField.children[1].children[0]).toHaveValue(passwordFake);
+
+    expect(confirmPasswordField).toBeInTheDocument();
+    userEvent.type(confirmPasswordField.children[1].children[0], passwordFake);
+    expect(confirmPasswordField.children[1].children[0]).toHaveAttribute('type', 'password');
+    expect(confirmPasswordField.children[1].children[0]).toHaveValue(passwordFake);
+  });
+});
