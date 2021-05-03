@@ -12,14 +12,58 @@ const ContextProvider = (props) => {
   const [openSignUpForm, setOpenSignUpForm] = useState(false);
   const [openLogInForm, setOpenLogInForm] = useState(false);
   const [currentUser, setCurrentUser] = useState();
+  const [loading, setLoading] = useState(true);
+  const [signInError, setSignInError] = useState(false);
+
+  // Sign Up Functions
 
   const signUp = (email, password) => {
-    return auth.createUserWithEmailAndPassword(email, password);
+    setLoading(true)
+    return auth.createUserWithEmailAndPassword(email, password).then(() => {
+      setSignInError(false);
+    }).catch(() => {
+      setSignInError(true);
+    });
+  };
+
+  const googleSignUp = () => {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    return auth.signInWithPopup(provider).then(() => {
+      setSignInError(false);
+    }).catch(() => {
+      setSignInError(true);
+    });
+  };
+
+  const facebookSignUp = () => {
+    const provider = new firebase.auth.FacebookAuthProvider();
+    provider.addScope('user_birthday');
+    return auth.signInWithPopup(provider).then(() => {
+      setSignInError(false);
+    }).catch(() => {
+      setSignInError(true);
+    });
+  };
+
+  const twitterSignUp = () => {
+    const provider = new firebase.auth.TwitterAuthProvider();
+    return auth.signInWithPopup(provider).then(() => {
+      setSignInError(false);
+    }).catch(() => {
+      setSignInError(true);
+    });
+  };
+
+  // Log Out
+
+  const logout = () => {
+    return auth.signOut();
   };
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       setCurrentUser(user);
+      setLoading(false);
     });
     return unsubscribe;
   }, [])
@@ -27,12 +71,14 @@ const ContextProvider = (props) => {
   const value = {
     openSignUpForm, setOpenSignUpForm,
     openLogInForm, setOpenLogInForm,
-    currentUser, signUp,
+    currentUser, signUp, signInError,
+    googleSignUp, facebookSignUp,
+    twitterSignUp, logout,
   };
 
   return (
     <Context.Provider value={value}>
-      {props.children}
+      {!loading && props.children}
     </Context.Provider>
   );
 };

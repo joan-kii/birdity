@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -8,9 +8,12 @@ import Button from '@material-ui/core/Button';
 import ChatIcon from '@material-ui/icons/Chat';
 import ExploreIcon from '@material-ui/icons/Explore';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Modal from '@material-ui/core/Modal'; 
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
-import { Context } from '../../context/Context';
+import { Context, useAuth } from '../../context/Context';
 import SignUpForm from '../signUpForm/SignUpForm';
 import LogInForm from '../logInForm/LogInForm';
 
@@ -59,10 +62,19 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+const Alert = (props) => {
+  return <MuiAlert elevation={6} variant='filled' {...props} />
+};
+
 const Topbar = () => {
 
   const classes = useStyles();
-  const { openSignUpForm, setOpenSignUpForm, openLogInForm, setOpenLogInForm } = useContext(Context);
+  const { openSignUpForm, setOpenSignUpForm, 
+    openLogInForm, setOpenLogInForm } = useContext(Context);
+  const { currentUser, logout,
+    signInError, setSignInError } = useAuth();
+  const [showLogInAlert, setShowLogInAlert] = useState(false);
+  const [showLogOutAlert, setShowLogOutAlert] = useState(false);
 
   const handleSignUp = () => {
     setOpenSignUpForm(true);
@@ -75,6 +87,20 @@ const Topbar = () => {
   const handleCloseLogInForm = () => {
     setOpenLogInForm(false);
   };
+
+  async function handleLogOut() {
+    await logout();
+    setShowLogOutAlert(true);
+  }
+
+  const handleCloseAlert = () => {
+    setShowLogInAlert(false);
+    setShowLogOutAlert(false);
+  };
+
+  useEffect(() => {
+    if(currentUser) setShowLogInAlert(true);
+  }, [currentUser])
 
   const renderSignUpForm = (<div><SignUpForm /></div>);
   const renderLogInForm = (<div><LogInForm /></div>);
@@ -115,6 +141,16 @@ const Topbar = () => {
                 Explore
               </Typography>
             </Button>
+            {currentUser ? 
+            <Button
+              data-testid='logoutButton'
+              variant='contained'
+              color='primary'
+              startIcon={<ExitToAppIcon />}
+              onClick={handleLogOut}
+              >
+              Log Out
+            </Button> : 
             <Button
               data-testid='loginButton'
               variant='contained'
@@ -125,7 +161,7 @@ const Topbar = () => {
               <Typography>
                 Sign Up / Log In
               </Typography>
-            </Button>
+            </Button>}
           </div>
         </ Toolbar>
       </ AppBar>
@@ -143,6 +179,30 @@ const Topbar = () => {
         aria-describedby='modal-descrition'>
         {renderLogInForm}
       </Modal>
+      <Snackbar 
+        open={showLogInAlert} 
+        autoHideDuration={4000}
+        onClose={handleCloseAlert}>
+        <Alert severity='success'>
+          You are logged in!
+        </Alert>
+      </Snackbar>
+      <Snackbar 
+        open={showLogOutAlert} 
+        autoHideDuration={4000}
+        onClose={handleCloseAlert}>
+        <Alert severity='success'>
+          You are logged out!
+        </Alert>
+      </Snackbar>
+      <Snackbar 
+        open={signInError} 
+        autoHideDuration={4000}
+        onClose={() => setSignInError(false)}>
+        <Alert severity='error'>
+          Unable to Sign In!
+        </Alert>
+      </Snackbar>
     </div>
   )
 };
