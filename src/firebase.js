@@ -1,4 +1,3 @@
-import { Functions } from '@material-ui/icons';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firebase-firestore';

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import Container from '@material-ui/core/Container';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -15,7 +15,7 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import Alert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles'; 
 
-import { Context } from '../../context/Context';
+import { useAuth, Context } from '../../context/Context';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -32,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
   title: {
     fontSize: 24,
     marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(1),
     cursor: 'default',
   },
   form: {
@@ -54,12 +55,33 @@ const useStyles = makeStyles((theme) => ({
 const SignUpForm = () => {
 
   const classes = useStyles();
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const { setOpenLogInForm, setOpenSignUpForm} = useContext(Context);
+  const emailRef = useRef();
+  const passwordRef = useRef();
+  const confirmPasswordRef = useRef();
+  const { signUp } = useAuth();
 
   const toggleModal = () => {
     setOpenLogInForm(true);
     setOpenSignUpForm(false);
   };
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    if(passwordRef.current.value !== confirmPasswordRef.current.value) {
+      return setError('Passwords do not match!')
+    }
+    try {
+      setError('');
+      setLoading(true);
+      await signUp(emailRef.current.value, passwordRef.current.value);
+    } catch {
+      setError('Failed to create an account')
+    }
+    setLoading(false);
+  }
 
   return (
     <Container>
@@ -74,7 +96,10 @@ const SignUpForm = () => {
           color='primary'>
             Sign Up
         </Typography>
-        <form className={classes.form}>
+
+        {error && <Alert severity='error'>{error}</Alert>}
+
+        <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={4}>
             <Grid container justify='center'>
               <ButtonGroup variant='contained'
@@ -107,6 +132,7 @@ const SignUpForm = () => {
                 id='email'
                 data-testid='email'
                 type='email'
+                inputRef={emailRef}
                 fullWidth
                 label='Email'
                 variant='outlined'
@@ -117,6 +143,7 @@ const SignUpForm = () => {
                 id='password'
                 data-testid='password'
                 type='password'
+                inputRef={passwordRef}
                 fullWidth
                 label='Password'
                 variant='outlined'
@@ -127,6 +154,7 @@ const SignUpForm = () => {
                 id='confirmPassword'
                 data-testid='confirmPassword'
                 type='password'
+                inputRef={confirmPasswordRef}
                 fullWidth
                 label='Confirm Password'
                 variant='outlined'
@@ -139,7 +167,8 @@ const SignUpForm = () => {
             className={classes.button}
             variant='contained'
             size='large'
-            fullWidth>
+            fullWidth
+            disabled={loading}>
               Sign Up
           </Button>
           <Grid container justify='flex-end'>

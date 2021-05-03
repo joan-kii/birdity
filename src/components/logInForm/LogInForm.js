@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useRef } from 'react';
 import Container from '@material-ui/core/Container';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -55,6 +55,8 @@ const LogInForm = () => {
 
   const classes = useStyles();
   const { setOpenLogInForm, setOpenSignUpForm } = useContext(Context);
+  const emailRef = useRef();
+  const passwordRef = useRef();
 
   const toggleModal = () => {
     setOpenSignUpForm(true);
@@ -107,6 +109,7 @@ const LogInForm = () => {
                 data-testid='email'
                 id='email'
                 type='email'
+                inputRef={emailRef}
                 fullWidth
                 label='Email'
                 variant='outlined'
@@ -117,6 +120,7 @@ const LogInForm = () => {
                 data-testid='password'
                 id='password'
                 type='password'
+                inputRef={passwordRef}
                 fullWidth
                 label='Password'
                 variant='outlined'
