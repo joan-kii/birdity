@@ -58,11 +58,11 @@ const SignUpForm = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { setOpenLogInForm, setOpenSignUpForm,
-    googleSignUp, facebookSignUp, twitterSignUp } = useContext(Context);
+    googleSignUp, facebookSignUp, twitterSignUp,
+    signUp } = useContext(Context);
   const emailRef = useRef();
   const passwordRef = useRef();
   const confirmPasswordRef = useRef();
-  const { signUp } = useAuth();
 
   const toggleModal = () => {
     setOpenLogInForm(true);

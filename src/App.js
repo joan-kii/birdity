@@ -5,9 +5,10 @@ import Topbar from './components/topbar/Topbar';
 import LeftMenu from './components/leftMenu/LeftMenu';
 
 const App = () => {
+  
   return (
     <>
-      <ContextProvider>
+      <ContextProvider>               
         <Topbar />
         <LeftMenu />
         <Router>

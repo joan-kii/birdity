@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import Container from '@material-ui/core/Container';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -54,14 +54,31 @@ const useStyles = makeStyles((theme) => ({
 const LogInForm = () => {
 
   const classes = useStyles();
-  const { setOpenLogInForm, setOpenSignUpForm } = useContext(Context);
+  const { setOpenLogInForm, setOpenSignUpForm,
+    login, googleSignUp, facebookSignUp, 
+    twitterSignUp } = useContext(Context);
   const emailRef = useRef();
   const passwordRef = useRef();
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const toggleModal = () => {
     setOpenSignUpForm(true);
     setOpenLogInForm(false);
   };
+
+  async function handleLogin(e) {
+    e.preventDefault();
+    try {
+      setError('');
+      setLoading(true);
+      await login(emailRef.current.value, passwordRef.current.value);
+      setOpenLogInForm(false);
+    } catch {
+      setError('Failed to Log In')
+    }
+    setLoading(false);
+  }
 
   return (
     <Container>
@@ -76,7 +93,7 @@ const LogInForm = () => {
         color='primary'>
           Log in
         </Typography>
-        <form className={classes.form}>
+        <form className={classes.form} onSubmit={handleLogin}>
           <Grid container spacing={4}>
             <Grid container justify='center'>
               <ButtonGroup variant='contained'

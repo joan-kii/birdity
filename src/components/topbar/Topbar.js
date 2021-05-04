@@ -19,9 +19,9 @@ import LogInForm from '../logInForm/LogInForm';
 
 const useStyles = makeStyles((theme) => ({
   grow: {
-      flexGrow: 1,
-      display: 'flex',
-    },
+    flexGrow: 1,
+    display: 'flex',
+  },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
     boxShadow: 'none',

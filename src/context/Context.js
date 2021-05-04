@@ -54,6 +54,16 @@ const ContextProvider = (props) => {
     });
   };
 
+  // Log In
+
+  const login = (email, password) => {
+    return auth.signInWithEmailAndPassword(email, password).then(() => {
+      setSignInError(false);
+    }).catch(() => {
+      setSignInError(true);
+    });
+  };
+
   // Log Out
 
   const logout = () => {
@@ -73,7 +83,7 @@ const ContextProvider = (props) => {
     openLogInForm, setOpenLogInForm,
     currentUser, signUp, signInError,
     googleSignUp, facebookSignUp,
-    twitterSignUp, logout,
+    twitterSignUp, logout, login,
   };
 
   return (
