@@ -14,6 +14,13 @@ describe('Topbar Component', () => {
     </Context.Provider>
   );
 
+  const renderUserLoggedTopbar = (
+    <Context.Provider 
+      value={{openSignUpForm: true, openLogInForm: true, currentUser: true}}>
+      <Topbar />
+    </Context.Provider>
+  );
+
   test('topbar renders fine', () => {
     render(renderTopbar);
   });
@@ -29,6 +36,11 @@ describe('Topbar Component', () => {
     expect(screen.getByTestId('chatButton')).toHaveTextContent('Chat');
     expect(screen.getByTestId('exploreButton')).toHaveTextContent('Explore');
     expect(screen.getByTestId('loginButton')).toHaveTextContent('Log In');
+  });
+
+  test('Sign up button change to logout when the user is logged', () => {
+    render(renderUserLoggedTopbar);
+    expect(screen.getByTestId('loginButton')).toHaveTextContent('Log Out');
   });
 });
 

@@ -80,6 +80,45 @@ const LogInForm = () => {
     setLoading(false);
   }
 
+  async function handleGoogleLogIn() {
+    try {
+      setError('');
+      setLoading(true);
+      await googleSignUp();
+      setOpenLogInForm(false);
+    } catch {
+      console.error(error);
+      setError('Unable to Login with Google');
+    }
+    setLoading(false);
+  }
+
+  async function handleFacebookLogIn() {
+    try {
+      setError('');
+      setLoading(true);
+      await facebookSignUp();
+      setOpenLogInForm(false);
+    } catch {
+      console.error(error);
+      setError('Unable to Login with Facebook');
+    }
+    setLoading(false);
+  }
+
+  async function handleTwitterLogIn() {
+    try {
+      setError('');
+      setLoading(true);
+      await twitterSignUp();
+      setOpenLogInForm(false);
+    } catch {
+      console.error(error);
+      setError('Unable to Login with Twitter');
+    }
+    setLoading(false);
+  }
+
   return (
     <Container>
       <Paper className={classes.paper}>
@@ -93,6 +132,9 @@ const LogInForm = () => {
         color='primary'>
           Log in
         </Typography>
+
+        { error && <Alert severity='error'>{error}</Alert> }
+
         <form className={classes.form} onSubmit={handleLogin}>
           <Grid container spacing={4}>
             <Grid container justify='center'>
@@ -101,17 +143,20 @@ const LogInForm = () => {
                 aria-label='contained button group'>
                 <Button 
                   data-testid='facebookLogInButton'
+                  onClick={handleFacebookLogIn}
                   endIcon={<FacebookIcon />}>
                   Log in with Facebook
                 </Button>
                 <Button 
                   data-testid='twitterLogInButton'
+                  onClick={handleTwitterLogIn}
                   startIcon={<TwitterIcon />}>
                   Log in with Twitter
                 </Button>
               </ButtonGroup>
               <Button
                 data-testid='googleLogInButton'
+                onClick={handleGoogleLogIn}
                 variant='contained'
                 className={classes.googleButton}
                 size='large'
