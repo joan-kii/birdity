@@ -82,6 +82,7 @@ const ContextProvider = (props) => {
     openSignUpForm, setOpenSignUpForm,
     openLogInForm, setOpenLogInForm,
     currentUser, signUp, signInError,
+    setSignInError,
     googleSignUp, facebookSignUp,
     twitterSignUp, logout, login,
   };
