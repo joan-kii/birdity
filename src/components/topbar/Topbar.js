@@ -70,9 +70,9 @@ const Topbar = () => {
 
   const classes = useStyles();
   const { openSignUpForm, setOpenSignUpForm, 
-    openLogInForm, setOpenLogInForm } = useContext(Context);
-  const { currentUser, logout,
-    signInError, setSignInError } = useAuth();
+    openLogInForm, setOpenLogInForm,
+    signInError, setSignInError } = useContext(Context);
+  const { currentUser, logout } = useAuth();
   const [showLogInAlert, setShowLogInAlert] = useState(false);
   const [showLogOutAlert, setShowLogOutAlert] = useState(false);
 
@@ -96,6 +96,7 @@ const Topbar = () => {
   const handleCloseAlert = () => {
     setShowLogInAlert(false);
     setShowLogOutAlert(false);
+    setSignInError(false);
   };
 
   useEffect(() => {
@@ -198,7 +199,7 @@ const Topbar = () => {
       <Snackbar 
         open={signInError} 
         autoHideDuration={4000}
-        onClose={() => setSignInError(false)}>
+        onClose={handleCloseAlert}>
         <Alert severity='error'>
           Unable to Sign In!
         </Alert>

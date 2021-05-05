@@ -73,10 +73,10 @@ const LogInForm = () => {
       setError('');
       setLoading(true);
       await login(emailRef.current.value, passwordRef.current.value);
-      setOpenLogInForm(false);
     } catch {
       setError('Failed to Log In')
     }
+    setOpenLogInForm(false);
     setLoading(false);
   }
 
@@ -85,11 +85,11 @@ const LogInForm = () => {
       setError('');
       setLoading(true);
       await googleSignUp();
-      setOpenLogInForm(false);
     } catch {
       console.error(error);
       setError('Unable to Login with Google');
     }
+    setOpenLogInForm(false);
     setLoading(false);
   }
 
@@ -98,11 +98,11 @@ const LogInForm = () => {
       setError('');
       setLoading(true);
       await facebookSignUp();
-      setOpenLogInForm(false);
     } catch {
       console.error(error);
       setError('Unable to Login with Facebook');
     }
+    setOpenLogInForm(false);
     setLoading(false);
   }
 
@@ -111,11 +111,11 @@ const LogInForm = () => {
       setError('');
       setLoading(true);
       await twitterSignUp();
-      setOpenLogInForm(false);
     } catch {
       console.error(error);
       setError('Unable to Login with Twitter');
     }
+    setOpenLogInForm(false);
     setLoading(false);
   }
 

@@ -78,10 +78,10 @@ const SignUpForm = () => {
       setError('');
       setLoading(true);
       await signUp(emailRef.current.value, passwordRef.current.value);
-      setOpenSignUpForm(false);
     } catch {
       setError('Failed to create an account')
     }
+    setOpenSignUpForm(false);
     setLoading(false);
   }
 
@@ -90,11 +90,11 @@ const SignUpForm = () => {
       setError('');
       setLoading(true);
       await googleSignUp();
-      setOpenSignUpForm(false);
     } catch {
       console.error(error);
       setError('Unable to Sign Up with Google');
     }
+    setOpenSignUpForm(false);
     setLoading(false);
   }
 
@@ -103,11 +103,11 @@ const SignUpForm = () => {
       setError('');
       setLoading(true);
       await facebookSignUp();
-      setOpenSignUpForm(false);
     } catch {
       console.error(error);
       setError('Unable to Sign Up with Facebook');
     }
+    setOpenSignUpForm(false);
     setLoading(false);
   }
 
@@ -116,11 +116,11 @@ const SignUpForm = () => {
       setError('');
       setLoading(true);
       await twitterSignUp();
-      setOpenSignUpForm(false);
     } catch {
       console.error(error);
       setError('Unable to Sign Up with Twitter');
     }
+    setOpenSignUpForm(false);
     setLoading(false);
   }
 
