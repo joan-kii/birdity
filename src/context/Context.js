@@ -17,9 +17,13 @@ const ContextProvider = (props) => {
 
   // Sign Up Functions
 
-  const signUp = (email, password) => {
+  const signUp = (email, password, name) => {
     setLoading(true)
-    return auth.createUserWithEmailAndPassword(email, password).then(() => {
+    return auth.createUserWithEmailAndPassword(email, password).then((credentials) => {
+      const user = credentials.user;
+      user.updateProfile({
+        displayName: name,
+      });
       setSignInError(false);
     }).catch(() => {
       setSignInError(true);

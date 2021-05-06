@@ -102,6 +102,8 @@ const Topbar = () => {
     if(currentUser) setShowLogInAlert(true);
   }, [currentUser])
 
+  if (currentUser) console.log(currentUser.displayName)
+
   const renderSignUpForm = (<div><SignUpForm /></div>);
   const renderLogInForm = (<div><LogInForm /></div>);
   
