@@ -12,19 +12,25 @@ const ContextProvider = (props) => {
   const [openSignUpForm, setOpenSignUpForm] = useState(false);
   const [openLogInForm, setOpenLogInForm] = useState(false);
   const [currentUser, setCurrentUser] = useState();
-  const [loading, setLoading] = useState(true);
   const [signInError, setSignInError] = useState(false);
 
   // Sign Up Functions
 
   const signUp = (email, password, name) => {
-    setLoading(true)
+    console.log(name)
     return auth.createUserWithEmailAndPassword(email, password).then((credentials) => {
       const user = credentials.user;
       user.updateProfile({
         displayName: name,
       });
+      console.log(user.displayName)
       setSignInError(false);
+      return db.collection('users').doc(credentials.user.uid).set({
+        name: credentials.user.displayName,
+        blog: [],
+        gallery: [],
+        comments: []
+      });
     }).catch(() => {
       setSignInError(true);
     });
@@ -77,7 +83,6 @@ const ContextProvider = (props) => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       setCurrentUser(user);
-      setLoading(false);
     });
     return unsubscribe;
   }, [])
@@ -93,7 +98,7 @@ const ContextProvider = (props) => {
 
   return (
     <Context.Provider value={value}>
-      {!loading && props.children}
+      {props.children}
     </Context.Provider>
   );
 };

@@ -71,6 +71,11 @@ const SignUpForm = () => {
     setOpenSignUpForm(false);
   };
 
+  const enableGoogleButton = () => {
+    userNameRef.current.value.length > 2 ? 
+      setValidName(false) : setValidName(true);
+  };
+
   async function handleSubmit(e) {
     e.preventDefault();
     if (passwordRef.current.value !== confirmPasswordRef.current.value) {
@@ -170,8 +175,9 @@ const SignUpForm = () => {
                 inputRef={userNameRef}
                 fullWidth
                 label='Name'
+                placeholder='At least 3 characters'
                 variant='outlined'
-                onChange={() => setValidName(false)}
+                onChange={enableGoogleButton}
                 />
             </Grid>
             <Grid item xs={12}>

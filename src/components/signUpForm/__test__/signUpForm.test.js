@@ -36,12 +36,19 @@ describe('Sign Up Modal', () => {
 
   test('text fields renders fine', () => {
     render(renderSignUpModal);
-    
+
+    const userNameField= screen.getByTestId('userName');
+    const userNameFake = 'Lucky';
     const emailField = screen.getByTestId('email');
     const emailFake = 'test@test.com';
     const passwordField = screen.getByTestId('password');
     const passwordFake = '123456';
     const confirmPasswordField = screen.getByTestId('confirmPassword');
+
+    expect(userNameField).toBeInTheDocument();
+    userEvent.type(userNameField.children[1].children[0], userNameFake);
+    expect(userNameField.children[1].children[0]).toHaveAttribute('type', 'text');
+    expect(userNameField.children[1].children[0]).toHaveValue(userNameFake);
 
     expect(emailField).toBeInTheDocument();
     userEvent.type(emailField.children[1].children[0], emailFake);
