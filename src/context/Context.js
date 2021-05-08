@@ -13,17 +13,32 @@ const ContextProvider = (props) => {
   const [openLogInForm, setOpenLogInForm] = useState(false);
   const [currentUser, setCurrentUser] = useState();
   const [signInError, setSignInError] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   // Sign Up Functions
 
   const signUp = (email, password, name) => {
-    console.log(name)
     return auth.createUserWithEmailAndPassword(email, password).then((credentials) => {
       const user = credentials.user;
       user.updateProfile({
         displayName: name,
+      }).then(function() {
+        setSignInError(false);
+        return db.collection('users').doc(credentials.user.uid).set({
+          name: credentials.user.displayName,
+          blog: [],
+          gallery: [],
+          comments: []
+        });
       });
-      console.log(user.displayName)
+    }).catch(() => {
+      setSignInError(true);
+    });
+  };
+
+  const googleSignUp = () => {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    return auth.signInWithPopup(provider).then((credentials) => {
       setSignInError(false);
       return db.collection('users').doc(credentials.user.uid).set({
         name: credentials.user.displayName,
@@ -36,20 +51,17 @@ const ContextProvider = (props) => {
     });
   };
 
-  const googleSignUp = () => {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    return auth.signInWithPopup(provider).then(() => {
-      setSignInError(false);
-    }).catch(() => {
-      setSignInError(true);
-    });
-  };
-
   const facebookSignUp = () => {
     const provider = new firebase.auth.FacebookAuthProvider();
     provider.addScope('user_birthday');
-    return auth.signInWithPopup(provider).then(() => {
+    return auth.signInWithPopup(provider).then((credentials) => {
       setSignInError(false);
+      return db.collection('users').doc(credentials.user.uid).set({
+        name: credentials.user.displayName,
+        blog: [],
+        gallery: [],
+        comments: []
+      });
     }).catch(() => {
       setSignInError(true);
     });
@@ -57,8 +69,14 @@ const ContextProvider = (props) => {
 
   const twitterSignUp = () => {
     const provider = new firebase.auth.TwitterAuthProvider();
-    return auth.signInWithPopup(provider).then(() => {
+    return auth.signInWithPopup(provider).then((credentials) => {
       setSignInError(false);
+      return db.collection('users').doc(credentials.user.uid).set({
+        name: credentials.user.displayName,
+        blog: [],
+        gallery: [],
+        comments: []
+      });
     }).catch(() => {
       setSignInError(true);
     });
@@ -83,6 +101,7 @@ const ContextProvider = (props) => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       setCurrentUser(user);
+      setLoading(false);
     });
     return unsubscribe;
   }, [])
@@ -98,7 +117,7 @@ const ContextProvider = (props) => {
 
   return (
     <Context.Provider value={value}>
-      {props.children}
+      {!loading && props.children}
     </Context.Provider>
   );
 };
