@@ -12,7 +12,6 @@ describe('LeftMenu Component', () => {
   test('List items renders fine', () => {
     render(<LeftMenu />);
     expect(screen.getByText('My Birds')).toBeInTheDocument();
-    expect(screen.getByText('My Blog')).toBeInTheDocument();
     expect(screen.getByText('My Comments')).toBeInTheDocument();
     expect(screen.getByText('About Us')).toBeInTheDocument();
   });

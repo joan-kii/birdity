@@ -8,7 +8,6 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary';
-import TextsmsIcon from '@material-ui/icons/Textsms';
 import BookIcon from '@material-ui/icons/Book';
 
 const drawerWidth = 340;
@@ -40,13 +39,6 @@ const LeftMenu = () => {
           </ListItemIcon>
           <ListItemText primary='My Birds' className={classes.text} />
         </ListItem> 
-
-        <ListItem button key='My Blog'>
-          <ListItemIcon>
-            <TextsmsIcon className={classes.icon} />
-          </ListItemIcon>
-          <ListItemText primary='My Blog' className={classes.text} />
-        </ListItem>  
 
         <ListItem button key='My Comments'>
           <ListItemIcon>

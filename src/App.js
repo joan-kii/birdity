@@ -1,8 +1,9 @@
-import { BrowserRouter as Router, Switch } from 'react-router-dom';
+import React from 'react';
 
 import ContextProvider from './context/Context';
 import Topbar from './components/topbar/Topbar';
 import LeftMenu from './components/leftMenu/LeftMenu';
+import NewPostArea from './components/newPostArea/NewPostArea';
 
 const App = () => {
   
@@ -11,11 +12,7 @@ const App = () => {
       <ContextProvider>               
         <Topbar />
         <LeftMenu />
-        <Router>
-          <Switch>
-
-          </Switch>
-        </Router>
+        <NewPostArea />
       </ContextProvider>
     </>
   );
