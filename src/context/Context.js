@@ -11,7 +11,7 @@ const ContextProvider = (props) => {
   
   const [openSignUpForm, setOpenSignUpForm] = useState(false);
   const [openLogInForm, setOpenLogInForm] = useState(false);
-  const [currentUser, setCurrentUser] = useState();
+  const [currentUser, setCurrentUser] = useState(null);
   const [signInError, setSignInError] = useState(false);
   const [loading, setLoading] = useState(true);
 

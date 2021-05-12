@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Paper from '@material-ui/core/Paper';
+import Alert from '@material-ui/lab/Alert';
 import TextField from '@material-ui/core/TextField';
 import FaceIcon from '@material-ui/icons/Face';
 import Grid from '@material-ui/core/Grid';
@@ -8,6 +9,8 @@ import SendIcon from '@material-ui/icons/Send';
 import IconButton from '@material-ui/core/IconButton';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import { makeStyles } from '@material-ui/core/styles';
+
+import { useAuth } from '../../context/Context';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,13 +40,25 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
     top: theme.spacing(1),
+  },
+  logInAlert: {
+    width: theme.spacing(27),
+    margin: 'auto',
   }
 }));
 
 const NewPostArea = () => {
 
   const classes = useStyles();
-    return (
+
+  const { currentUser } = useAuth();
+  const [disableUpload, setDisableUpload] = useState(true);
+
+  useEffect(() => {
+    currentUser ? setDisableUpload(false) : setDisableUpload(true);
+  }, [currentUser])
+
+  return (
     <div className={classes.root}>
       <Paper elevation={3}>
         <Grid 
@@ -62,16 +77,18 @@ const NewPostArea = () => {
               className={classes.textField}
               label='Create a Post'
               placeholder='Max. 150 chars.'
+              disabled={disableUpload}
               inputProps={{maxLength: 150}}
               multiline
-              rowsMax={4}/>
+              rowsMax={4} />
           </Grid>
           <Grid 
             item
             className={classes.cameraIcon}>
             <IconButton 
               data-testid='addFileButton'
-              color='primary'>
+              color='primary'
+              disabled={disableUpload}>
               <PhotoCamera fontSize='large' />
             </IconButton>
           </Grid>
@@ -80,11 +97,19 @@ const NewPostArea = () => {
               data-testid='sendPostButton'
               variant='contained'
               color='primary'
-              endIcon={<SendIcon />}>
+              disabled={disableUpload}
+              endIcon={<SendIcon />
+              }>
               Send
             </Button>
           </Grid>
         </Grid>
+        {disableUpload && 
+        <Alert 
+          severity='info'
+          className={classes.logInAlert}>
+          Please, log in to post
+        </Alert>}
       </Paper>
     </div>
   )
