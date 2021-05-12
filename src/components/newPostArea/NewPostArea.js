@@ -32,6 +32,11 @@ const useStyles = makeStyles((theme) => ({
   textField: {
     marginLeft: theme.spacing(2),
     width: '60ch',
+  }, 
+  cameraIcon: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    top: theme.spacing(1),
   }
 }));
 
@@ -47,24 +52,32 @@ const NewPostArea = () => {
           <Grid 
             item
             className={classes.accountIcon}>
-            <FaceIcon />
+            <FaceIcon 
+              color='primary'
+              fontSize='large' />
           </Grid>
           <Grid item>
             <TextField 
+              data-testid='postTextField'
               className={classes.textField}
-              label='Create A Post'
+              label='Create a Post'
               placeholder='Max. 150 chars.'
               inputProps={{maxLength: 150}}
               multiline
               rowsMax={4}/>
           </Grid>
-          <Grid item>
-            <IconButton color='primary'>
-              <PhotoCamera />
+          <Grid 
+            item
+            className={classes.cameraIcon}>
+            <IconButton 
+              data-testid='addFileButton'
+              color='primary'>
+              <PhotoCamera fontSize='large' />
             </IconButton>
           </Grid>
           <Grid item>
             <Button
+              data-testid='sendPostButton'
               variant='contained'
               color='primary'
               endIcon={<SendIcon />}>
