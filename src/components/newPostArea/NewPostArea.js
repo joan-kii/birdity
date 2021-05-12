@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button';
 import SendIcon from '@material-ui/icons/Send';
 import IconButton from '@material-ui/core/IconButton';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
+import DoneAllIcon from '@material-ui/icons/DoneAll';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { useAuth } from '../../context/Context';
@@ -41,6 +42,14 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(1),
     top: theme.spacing(1),
   },
+  inputFile: {
+    display: 'none',
+  },
+  checkIcon: {
+    marginLeft: theme.spacing(3),
+    marginRight: theme.spacing(3),
+    top: theme.spacing(1),
+  },
   logInAlert: {
     width: theme.spacing(27),
     margin: 'auto',
@@ -53,9 +62,25 @@ const NewPostArea = () => {
 
   const { currentUser } = useAuth();
   const [disableUpload, setDisableUpload] = useState(true);
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
+
+  const handleUploadImage = (event) => {
+    const image = event.target.files[0];
+    setIsImageLoaded(true);
+    console.log(image.name)
+  };
+
+  const handleCreatePost = () => {
+    setIsImageLoaded(false);
+  };
 
   useEffect(() => {
-    currentUser ? setDisableUpload(false) : setDisableUpload(true);
+    if (currentUser) {
+      setDisableUpload(false);
+    } else {
+    setIsImageLoaded(false);
+    setDisableUpload(true);
+    }
   }, [currentUser])
 
   return (
@@ -82,22 +107,38 @@ const NewPostArea = () => {
               multiline
               rowsMax={4} />
           </Grid>
-          <Grid 
+          {!isImageLoaded ? 
+            <Grid 
+              item
+              className={classes.cameraIcon}>
+                <input 
+                  id='inputFile'
+                  accept='image/*'
+                  className={classes.inputFile}
+                  type='file'
+                  onChange={handleUploadImage} />
+                <label htmlFor='inputFile'>
+                  <IconButton 
+                    data-testid='addFileButton'
+                    color='primary'
+                    disabled={disableUpload}
+                    component='span'>
+                    <PhotoCamera fontSize='large' />
+                  </IconButton>
+                </label>
+            </Grid> :
+            <Grid 
             item
-            className={classes.cameraIcon}>
-            <IconButton 
-              data-testid='addFileButton'
-              color='primary'
-              disabled={disableUpload}>
-              <PhotoCamera fontSize='large' />
-            </IconButton>
-          </Grid>
+            className={classes.checkIcon}>
+              <DoneAllIcon color='secondary' />
+            </ Grid>}
           <Grid item>
             <Button
               data-testid='sendPostButton'
               variant='contained'
               color='primary'
               disabled={disableUpload}
+              onClick={handleCreatePost}
               endIcon={<SendIcon />
               }>
               Send
