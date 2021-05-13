@@ -9,6 +9,8 @@ import SendIcon from '@material-ui/icons/Send';
 import IconButton from '@material-ui/core/IconButton';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
+import SnackBar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { useAuth } from '../../context/Context';
@@ -59,19 +61,32 @@ const useStyles = makeStyles((theme) => ({
 const NewPostArea = () => {
 
   const classes = useStyles();
+  const allowedFileTypes = ['image/jpg', 'image/png'];
 
   const { currentUser } = useAuth();
   const [disableUpload, setDisableUpload] = useState(true);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const [imageUploadError, setImageUploadError] = useState(false);
 
   const handleUploadImage = (event) => {
     const image = event.target.files[0];
-    setIsImageLoaded(true);
-    console.log(image.name)
+
+    if (image && allowedFileTypes.includes(image)) {
+      setIsImageLoaded(true);
+      setImageUploadError(false);
+      console.log(image.name);
+    } else {
+      setIsImageLoaded(false);
+      setImageUploadError(true);
+    }
   };
 
   const handleCreatePost = () => {
     setIsImageLoaded(false);
+  };
+
+  const handleCloseFileErrorMessage = () => {
+    setImageUploadError(false);
   };
 
   useEffect(() => {
@@ -152,6 +167,18 @@ const NewPostArea = () => {
           Please, log in to post
         </Alert>}
       </Paper>
+      <SnackBar 
+        open={imageUploadError}
+        autoHideDuration={5000}
+        onClose={handleCloseFileErrorMessage}>
+          <MuiAlert
+            elevation={4}
+            variant='filled'
+            severity='error'
+            onClose={handleCloseFileErrorMessage}>
+            Please, select a .jpg or .png file
+          </MuiAlert>
+      </SnackBar>
     </div>
   )
 };

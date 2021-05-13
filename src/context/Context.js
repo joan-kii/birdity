@@ -1,11 +1,18 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import firebase from 'firebase/app';
-import { auth, db } from '../firebase';
+import { auth, db, storage, firebaseTimestamp } from '../firebase';
 
-export const Context = createContext();
+// Hooks
+
 export const useAuth = () => {
   return useContext(Context);
 };
+export const useStorage = (file) => {
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [imageUrl, setImageUrl] = useState(null);
+};
+
+export const Context = createContext();
 
 const ContextProvider = (props) => {
   
