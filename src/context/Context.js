@@ -14,20 +14,23 @@ export const useStorage = () => {
   const [imageUrl, setImageUrl] = useState(null);
 
   useEffect(() => {
-    const storageRef = storage.ref(file.name);
-    const collectionRef = db.collection('images');
-
-    storageRef.put(file).on('state_changed', (snap) => {
-      let percentage = (snap.bytesTransferred / snap.totalBytes) * 100;
-      setUploadProgress(percentage);
-    }, (err) => {
-      console.error(err);
-    }, async () => {
-      const url = await storageRef.getDownloadURL();
-      const createdAt = firebaseTimestamp();
-      await collectionRef.add({url, createdAt});
-      setImageUrl(url);
-    });
+    if (file) {
+      const storageRef = storage.ref(file.name);
+      const collectionRef = db.collection('images');
+  
+      storageRef.put(file).on('state_changed', (snap) => {
+        let percentage = (snap.bytesTransferred / snap.totalBytes) * 100;
+        setUploadProgress(percentage);
+      }, (err) => {
+        console.error(err);
+      }, async () => {
+        const url = await storageRef.getDownloadURL();
+        const createdAt = firebaseTimestamp;
+        console.log(createdAt)
+        /* await collectionRef.add({url, createdAt}); */
+        setImageUrl(url);
+      });
+    }
   }, [file]);
   return {uploadProgress, imageUrl, setFile};
 };

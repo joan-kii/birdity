@@ -11,7 +11,6 @@ import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
 import SnackBar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { useAuth, useStorage } from '../../context/Context';
@@ -40,18 +39,13 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(2),
     width: '60ch',
   }, 
-  cameraIcon: {
+  uploadButton: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
     top: theme.spacing(1),
   },
   inputFile: {
     display: 'none',
-  },
-  checkIcon: {
-    marginLeft: theme.spacing(3),
-    marginRight: theme.spacing(3),
-    top: theme.spacing(1),
   },
   logInAlert: {
     width: theme.spacing(27),
@@ -62,23 +56,25 @@ const useStyles = makeStyles((theme) => ({
 const NewPostArea = () => {
 
   const classes = useStyles();
-  const allowedFileTypes = ['image/jpg', 'image/png'];
+  const allowedFileTypes = ['image/jpeg', 'image/png'];
 
   const { currentUser } = useAuth();
-  const { uploadProgress, imageUrl, setFile } = useStorage();
+  const { uploadProgress, imageUrl, setFile } = useStorage(null);
   const [disableUpload, setDisableUpload] = useState(true);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [imageUploadError, setImageUploadError] = useState(false);
 
+  useEffect(() => {
+    if (uploadProgress === 100) setIsImageLoaded(true);
+  }, [uploadProgress])
+  
   const handleUploadImage = (event) => {
     const image = event.target.files[0];
-
-    if (image && allowedFileTypes.includes(image)) {
-      setIsImageLoaded(true);
+    
+    if (image && allowedFileTypes.includes(image.type)) {
       setImageUploadError(false);
       setFile(image);
     } else {
-      setIsImageLoaded(false);
       setImageUploadError(true);
     }
   };
@@ -124,34 +120,27 @@ const NewPostArea = () => {
               multiline
               rowsMax={4} />
           </Grid>
-          <CircularProgress 
-            variant='determinate' 
-            value={uploadProgress} />
           {!isImageLoaded ? 
-            <Grid 
-              item
-              className={classes.cameraIcon}>
-                <input 
-                  id='inputFile'
-                  accept='image/*'
-                  className={classes.inputFile}
-                  type='file'
-                  onChange={handleUploadImage} />
-                <label htmlFor='inputFile'>
-                  <IconButton 
-                    data-testid='addFileButton'
-                    color='primary'
-                    disabled={disableUpload}
-                    component='span'>
-                    <PhotoCamera fontSize='large' />
-                  </IconButton>
-                </label>
-            </Grid> :
-            <Grid 
+          <Grid 
             item
-            className={classes.checkIcon}>
-              <DoneAllIcon color='secondary' />
-            </ Grid>}
+            className={classes.uploadButton}>
+              <input 
+                id='inputFile'
+                accept='image/*'
+                className={classes.inputFile}
+                type='file'
+                onChange={handleUploadImage} />
+              <label htmlFor='inputFile'>
+                <IconButton 
+                  data-testid='addFileButton'
+                  color='primary'
+                  disabled={disableUpload}
+                  component='span'>
+                  <PhotoCamera fontSize='large' />
+                </IconButton>
+              </label>
+          </Grid> :
+          <DoneAllIcon color='secondary' />}
           <Grid item>
             <Button
               data-testid='sendPostButton'
@@ -159,8 +148,7 @@ const NewPostArea = () => {
               color='primary'
               disabled={disableUpload}
               onClick={handleCreatePost}
-              endIcon={<SendIcon />
-              }>
+              endIcon={<SendIcon />}>
               Send
             </Button>
           </Grid>
