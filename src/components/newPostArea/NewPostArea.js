@@ -11,9 +11,10 @@ import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
 import SnackBar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { useAuth } from '../../context/Context';
+import { useAuth, useStorage } from '../../context/Context';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -64,6 +65,7 @@ const NewPostArea = () => {
   const allowedFileTypes = ['image/jpg', 'image/png'];
 
   const { currentUser } = useAuth();
+  const { uploadProgress, imageUrl, setFile } = useStorage();
   const [disableUpload, setDisableUpload] = useState(true);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [imageUploadError, setImageUploadError] = useState(false);
@@ -74,7 +76,7 @@ const NewPostArea = () => {
     if (image && allowedFileTypes.includes(image)) {
       setIsImageLoaded(true);
       setImageUploadError(false);
-      console.log(image.name);
+      setFile(image);
     } else {
       setIsImageLoaded(false);
       setImageUploadError(true);
@@ -122,6 +124,9 @@ const NewPostArea = () => {
               multiline
               rowsMax={4} />
           </Grid>
+          <CircularProgress 
+            variant='determinate' 
+            value={uploadProgress} />
           {!isImageLoaded ? 
             <Grid 
               item

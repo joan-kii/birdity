@@ -7,10 +7,32 @@ import { auth, db, storage, firebaseTimestamp } from '../firebase';
 export const useAuth = () => {
   return useContext(Context);
 };
-export const useStorage = (file) => {
+
+export const useStorage = () => {
+  const [file, setFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [imageUrl, setImageUrl] = useState(null);
+
+  useEffect(() => {
+    const storageRef = storage.ref(file.name);
+    const collectionRef = db.collection('images');
+
+    storageRef.put(file).on('state_changed', (snap) => {
+      let percentage = (snap.bytesTransferred / snap.totalBytes) * 100;
+      setUploadProgress(percentage);
+    }, (err) => {
+      console.error(err);
+    }, async () => {
+      const url = await storageRef.getDownloadURL();
+      const createdAt = firebaseTimestamp();
+      await collectionRef.add({url, createdAt});
+      setImageUrl(url);
+    });
+  }, [file]);
+  return {uploadProgress, imageUrl, setFile};
 };
+
+// Context
 
 export const Context = createContext();
 
