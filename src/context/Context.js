@@ -25,9 +25,8 @@ export const useStorage = () => {
         console.error(err);
       }, async () => {
         const url = await storageRef.getDownloadURL();
-        const createdAt = firebaseTimestamp;
-        console.log(createdAt)
-        /* await collectionRef.add({url, createdAt}); */
+        const createdAt = firebaseTimestamp();
+        await collectionRef.add({url, createdAt});
         setImageUrl(url);
       });
     }
@@ -58,7 +57,7 @@ const ContextProvider = (props) => {
         setSignInError(false);
         return db.collection('users').doc(credentials.user.uid).set({
           name: credentials.user.displayName,
-          blog: [],
+          posts: [],
           gallery: [],
           comments: []
         });
@@ -129,6 +128,12 @@ const ContextProvider = (props) => {
   const logout = () => {
     return auth.signOut();
   };
+
+  // Create Post
+
+  /* const createPost = () => {
+    return db.collection('users').doc(currentUser.id).
+  }; */
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {

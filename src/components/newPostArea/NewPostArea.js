@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Paper from '@material-ui/core/Paper';
 import Alert from '@material-ui/lab/Alert';
 import TextField from '@material-ui/core/TextField';
@@ -11,6 +11,7 @@ import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
 import SnackBar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { useAuth, useStorage } from '../../context/Context';
@@ -44,8 +45,17 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(1),
     top: theme.spacing(1),
   },
+  checkIcon: {
+    marginLeft: theme.spacing(3),
+    marginRight: theme.spacing(3),
+    top: theme.spacing(1),
+  },
   inputFile: {
     display: 'none',
+  },
+  linearProgress: {
+    width: theme.spacing(30),
+    margin: 'auto',
   },
   logInAlert: {
     width: theme.spacing(27),
@@ -60,13 +70,19 @@ const NewPostArea = () => {
 
   const { currentUser } = useAuth();
   const { uploadProgress, imageUrl, setFile } = useStorage(null);
+  const textPostRef = useRef();
+  const [loadingImage, setLoadingImage] = useState(false);
   const [disableUpload, setDisableUpload] = useState(true);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [imageUploadError, setImageUploadError] = useState(false);
 
   useEffect(() => {
-    if (uploadProgress === 100) setIsImageLoaded(true);
-  }, [uploadProgress])
+    if (uploadProgress === 100) {
+      setIsImageLoaded(true);
+      setLoadingImage(false);
+    }
+    if (uploadProgress > 0 && uploadProgress < 100) setLoadingImage(true);
+  }, [uploadProgress]) 
   
   const handleUploadImage = (event) => {
     const image = event.target.files[0];
@@ -79,7 +95,9 @@ const NewPostArea = () => {
     }
   };
 
-  const handleCreatePost = () => {
+  const handleCreatePost = (event) => {
+    event.preventDefault();
+    console.log(textPostRef.current.value)
     setIsImageLoaded(false);
   };
 
@@ -99,66 +117,77 @@ const NewPostArea = () => {
   return (
     <div className={classes.root}>
       <Paper elevation={3}>
-        <Grid 
-          container 
-          className={classes.textFieldGrid}>
+        <form onSubmit={handleCreatePost}>
           <Grid 
-            item
-            className={classes.accountIcon}>
-            <FaceIcon 
-              color='primary'
-              fontSize='large' />
+            container 
+            className={classes.textFieldGrid}>
+            <Grid 
+              item
+              className={classes.accountIcon}>
+              <FaceIcon 
+                color='primary'
+                fontSize='large' />
+            </Grid>
+            <Grid item>
+              <TextField 
+                data-testid='postTextField'
+                inputRef={textPostRef}
+                className={classes.textField}
+                label='Create a Post'
+                placeholder='Max. 150 chars.'
+                disabled={disableUpload}
+                inputProps={{maxLength: 150}}
+                multiline
+                rowsMax={4} />
+            </Grid>
+            {!isImageLoaded ? 
+            <Grid 
+              item
+              className={classes.uploadButton}>
+                <input 
+                  id='inputFile'
+                  accept='image/*'
+                  className={classes.inputFile}
+                  type='file'
+                  onChange={handleUploadImage} />
+                <label htmlFor='inputFile'>
+                  <IconButton 
+                    data-testid='addFileButton'
+                    color='primary'
+                    disabled={disableUpload}
+                    component='span'>
+                    <PhotoCamera fontSize='large' />
+                  </IconButton>
+                </label>
+            </Grid> :
+            <Grid 
+              item
+              className={classes.checkIcon}>
+              <DoneAllIcon color='secondary' />
+            </Grid>}
+            <Grid item>
+              <Button
+                data-testid='sendPostButton'
+                variant='contained'
+                color='primary'
+                disabled={disableUpload}
+                type='submit'
+                endIcon={<SendIcon />}>
+                Post
+              </Button>
+            </Grid>
           </Grid>
-          <Grid item>
-            <TextField 
-              data-testid='postTextField'
-              className={classes.textField}
-              label='Create a Post'
-              placeholder='Max. 150 chars.'
-              disabled={disableUpload}
-              inputProps={{maxLength: 150}}
-              multiline
-              rowsMax={4} />
-          </Grid>
-          {!isImageLoaded ? 
-          <Grid 
-            item
-            className={classes.uploadButton}>
-              <input 
-                id='inputFile'
-                accept='image/*'
-                className={classes.inputFile}
-                type='file'
-                onChange={handleUploadImage} />
-              <label htmlFor='inputFile'>
-                <IconButton 
-                  data-testid='addFileButton'
-                  color='primary'
-                  disabled={disableUpload}
-                  component='span'>
-                  <PhotoCamera fontSize='large' />
-                </IconButton>
-              </label>
-          </Grid> :
-          <DoneAllIcon color='secondary' />}
-          <Grid item>
-            <Button
-              data-testid='sendPostButton'
-              variant='contained'
-              color='primary'
-              disabled={disableUpload}
-              onClick={handleCreatePost}
-              endIcon={<SendIcon />}>
-              Send
-            </Button>
-          </Grid>
-        </Grid>
-        {disableUpload && 
-        <Alert 
-          severity='info'
-          className={classes.logInAlert}>
-          Please, log in to post
-        </Alert>}
+          {loadingImage &&
+          <LinearProgress
+          className={classes.linearProgress}
+            value={uploadProgress} />}
+          {disableUpload && 
+          <Alert 
+            severity='info'
+            className={classes.logInAlert}>
+            Please, log in to post
+          </Alert>}
+        </form>
       </Paper>
       <SnackBar 
         open={imageUploadError}
