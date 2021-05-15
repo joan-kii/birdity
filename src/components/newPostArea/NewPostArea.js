@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import Paper from '@material-ui/core/Paper';
 import Alert from '@material-ui/lab/Alert';
 import TextField from '@material-ui/core/TextField';
@@ -14,7 +14,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { useAuth, useStorage } from '../../context/Context';
+import { useAuth, useStorage, Context } from '../../context/Context';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -70,11 +70,13 @@ const NewPostArea = () => {
 
   const { currentUser } = useAuth();
   const { uploadProgress, imageUrl, setFile } = useStorage(null);
+  const { createPost } = useContext(Context);
   const textPostRef = useRef();
   const [loadingImage, setLoadingImage] = useState(false);
   const [disableUpload, setDisableUpload] = useState(true);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [imageUploadError, setImageUploadError] = useState(false);
+  const [image, setImage] = useState(null);
 
   useEffect(() => {
     if (uploadProgress === 100) {
@@ -89,7 +91,7 @@ const NewPostArea = () => {
     
     if (image && allowedFileTypes.includes(image.type)) {
       setImageUploadError(false);
-      setFile(image);
+      setImage(image);
     } else {
       setImageUploadError(true);
     }
@@ -97,7 +99,10 @@ const NewPostArea = () => {
 
   const handleCreatePost = (event) => {
     event.preventDefault();
-    console.log(textPostRef.current.value)
+    setFile(image);
+    createPost([textPostRef.current.value, imageUrl || null]);
+    textPostRef.current.value = '';
+    textPostRef.current.focused = false;
     setIsImageLoaded(false);
   };
 
@@ -136,6 +141,7 @@ const NewPostArea = () => {
                 label='Create a Post'
                 placeholder='Max. 150 chars.'
                 disabled={disableUpload}
+                InputLabelProps={{shrink: true}}
                 inputProps={{maxLength: 150}}
                 multiline
                 rowsMax={4} />
@@ -145,6 +151,7 @@ const NewPostArea = () => {
               item
               className={classes.uploadButton}>
                 <input 
+                  disabled={disableUpload}
                   id='inputFile'
                   accept='image/*'
                   className={classes.inputFile}

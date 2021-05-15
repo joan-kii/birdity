@@ -60,7 +60,6 @@ const LogInForm = () => {
   const emailRef = useRef();
   const passwordRef = useRef();
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
 
   const toggleModal = () => {
     setOpenSignUpForm(true);
@@ -71,52 +70,44 @@ const LogInForm = () => {
     e.preventDefault();
     try {
       setError('');
-      setLoading(true);
       await login(emailRef.current.value, passwordRef.current.value);
     } catch {
       setError('Failed to Log In')
     }
     setOpenLogInForm(false);
-    setLoading(false);
   }
 
   async function handleGoogleLogIn() {
     try {
       setError('');
-      setLoading(true);
       await googleSignUp();
     } catch {
       console.error(error);
       setError('Unable to Login with Google');
     }
     setOpenLogInForm(false);
-    setLoading(false);
   }
 
   async function handleFacebookLogIn() {
     try {
       setError('');
-      setLoading(true);
       await facebookSignUp();
     } catch {
       console.error(error);
       setError('Unable to Login with Facebook');
     }
     setOpenLogInForm(false);
-    setLoading(false);
   }
 
   async function handleTwitterLogIn() {
     try {
       setError('');
-      setLoading(true);
       await twitterSignUp();
     } catch {
       console.error(error);
       setError('Unable to Login with Twitter');
     }
     setOpenLogInForm(false);
-    setLoading(false);
   }
 
   return (

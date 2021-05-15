@@ -131,9 +131,11 @@ const ContextProvider = (props) => {
 
   // Create Post
 
-  /* const createPost = () => {
-    return db.collection('users').doc(currentUser.id).
-  }; */
+  const createPost = (text, imageUrl) => {
+    return db.collection('users').doc(currentUser.uid).update({
+      posts: {text, imageUrl}
+    })
+  };
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
@@ -147,7 +149,7 @@ const ContextProvider = (props) => {
     openSignUpForm, setOpenSignUpForm,
     openLogInForm, setOpenLogInForm,
     currentUser, signUp, signInError,
-    setSignInError,
+    setSignInError, createPost,
     googleSignUp, facebookSignUp,
     twitterSignUp, logout, login,
   };
