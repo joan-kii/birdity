@@ -1,37 +1,11 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import firebase from 'firebase/app';
-import { auth, db, storage, firebaseTimestamp } from '../firebase';
+import { auth, db } from '../firebase';
 
 // Hooks
 
 export const useAuth = () => {
   return useContext(Context);
-};
-
-export const useStorage = () => {
-  const [file, setFile] = useState(null);
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [imageUrl, setImageUrl] = useState(null);
-
-  useEffect(() => {
-    if (file) {
-      const storageRef = storage.ref(file.name);
-      const collectionRef = db.collection('images');
-  
-      storageRef.put(file).on('state_changed', (snap) => {
-        let percentage = (snap.bytesTransferred / snap.totalBytes) * 100;
-        setUploadProgress(percentage);
-      }, (err) => {
-        console.error(err);
-      }, async () => {
-        const url = await storageRef.getDownloadURL();
-        const createdAt = firebaseTimestamp();
-        await collectionRef.add({url, createdAt});
-        setImageUrl(url);
-      });
-    }
-  }, [file]);
-  return {uploadProgress, imageUrl, setFile};
 };
 
 // Context
@@ -48,7 +22,7 @@ const ContextProvider = (props) => {
 
   // Sign Up Functions
 
-  const signUp = (email, password, name) => {
+  const signUp = async function(email, password, name){
     return auth.createUserWithEmailAndPassword(email, password).then((credentials) => {
       const user = credentials.user;
       user.updateProfile({
@@ -67,13 +41,13 @@ const ContextProvider = (props) => {
     });
   };
 
-  const googleSignUp = () => {
+  const googleSignUp = async function() {
     const provider = new firebase.auth.GoogleAuthProvider();
     return auth.signInWithPopup(provider).then((credentials) => {
       setSignInError(false);
       return db.collection('users').doc(credentials.user.uid).set({
         name: credentials.user.displayName,
-        blog: [],
+        posts: [],
         gallery: [],
         comments: []
       });
@@ -82,14 +56,14 @@ const ContextProvider = (props) => {
     });
   };
 
-  const facebookSignUp = () => {
+  const facebookSignUp = async function() {
     const provider = new firebase.auth.FacebookAuthProvider();
     provider.addScope('user_birthday');
     return auth.signInWithPopup(provider).then((credentials) => {
       setSignInError(false);
       return db.collection('users').doc(credentials.user.uid).set({
         name: credentials.user.displayName,
-        blog: [],
+        posts: [],
         gallery: [],
         comments: []
       });
@@ -98,13 +72,13 @@ const ContextProvider = (props) => {
     });
   };
 
-  const twitterSignUp = () => {
+  const twitterSignUp = async function() {
     const provider = new firebase.auth.TwitterAuthProvider();
     return auth.signInWithPopup(provider).then((credentials) => {
       setSignInError(false);
       return db.collection('users').doc(credentials.user.uid).set({
         name: credentials.user.displayName,
-        blog: [],
+        posts: [],
         gallery: [],
         comments: []
       });
@@ -115,7 +89,7 @@ const ContextProvider = (props) => {
 
   // Log In
 
-  const login = (email, password) => {
+  const login = async function (email, password) {
     return auth.signInWithEmailAndPassword(email, password).then(() => {
       setSignInError(false);
     }).catch(() => {
@@ -127,14 +101,6 @@ const ContextProvider = (props) => {
 
   const logout = () => {
     return auth.signOut();
-  };
-
-  // Create Post
-
-  const createPost = (text, imageUrl) => {
-    return db.collection('users').doc(currentUser.uid).update({
-      posts: {text, imageUrl}
-    })
   };
 
   useEffect(() => {
@@ -149,7 +115,7 @@ const ContextProvider = (props) => {
     openSignUpForm, setOpenSignUpForm,
     openLogInForm, setOpenLogInForm,
     currentUser, signUp, signInError,
-    setSignInError, createPost,
+    setSignInError, 
     googleSignUp, facebookSignUp,
     twitterSignUp, logout, login,
   };

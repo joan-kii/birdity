@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Paper from '@material-ui/core/Paper';
 import Alert from '@material-ui/lab/Alert';
 import TextField from '@material-ui/core/TextField';
@@ -14,7 +14,9 @@ import MuiAlert from '@material-ui/lab/Alert';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { useAuth, useStorage, Context } from '../../context/Context';
+import { useAuth } from '../../context/Context';
+import { db, firebase, firebaseTimestamp } from '../firebase';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -69,14 +71,13 @@ const NewPostArea = () => {
   const allowedFileTypes = ['image/jpeg', 'image/png'];
 
   const { currentUser } = useAuth();
-  const { uploadProgress, imageUrl, setFile } = useStorage(null);
-  const { createPost } = useContext(Context);
   const textPostRef = useRef();
   const [loadingImage, setLoadingImage] = useState(false);
   const [disableUpload, setDisableUpload] = useState(true);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [imageUploadError, setImageUploadError] = useState(false);
   const [image, setImage] = useState(null);
+  const [uploadProgress, setUploadProgress] = useState(false);
 
   useEffect(() => {
     if (uploadProgress === 100) {
@@ -99,11 +100,56 @@ const NewPostArea = () => {
 
   const handleCreatePost = (event) => {
     event.preventDefault();
+    setIsImageLoaded(false);
     setFile(image);
-    createPost([textPostRef.current.value, imageUrl || null]);
+    createPost(textPostRef.current.value, imageUrl, createdAt);
     textPostRef.current.value = '';
     textPostRef.current.focused = false;
-    setIsImageLoaded(false);
+    setTimeout(() => setIsImageLoaded(false), 3000)
+  };
+
+
+  const useStorage = () => {
+    const [file, setFile] = useState(null);
+    const [uploadProgress, setUploadProgress] = useState(0);
+    const [imageUrl, setImageUrl] = useState(null);
+    const [createdAt, setCreatedAt] = useState(null);
+   
+    useEffect(() => {
+      if (file) {
+        const storageRef = storage.ref(file.name);
+        const collectionRef = db.collection('images');
+        storageRef.put(file).on('state_changed', (snap) => {
+          let percentage = (snap.bytesTransferred / snap.totalBytes) * 100;
+          setUploadProgress(percentage);
+        }, (err) => {
+          console.error(err);
+        }, async () => {
+          const url = await storageRef.getDownloadURL();
+          const createdAt = firebaseTimestamp();
+          await collectionRef.add({url, createdAt});
+          setImageUrl(url);
+          setCreatedAt(createdAt);
+        });
+      }
+    }, [file]);
+    console.log(imageUrl, createdAt)
+    return {uploadProgress, imageUrl, setFile, createdAt};
+  };
+
+
+  // Create Post
+
+  const createPost = (text, imageUrl, createdAt) => {
+    const post = {text, imageUrl, createdAt};
+    console.log(post)
+    return db.collection('users')
+            .doc(currentUser.uid)
+            .update({
+              posts: firebase.firestore.FieldValue.arrayUnion({
+                post
+              })
+            })
   };
 
   const handleCloseFileErrorMessage = () => {
