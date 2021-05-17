@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import firebase from 'firebase/app';
 import { auth, db } from '../firebase';
 
-// Hooks
+// Hook Auth
 
 export const useAuth = () => {
   return useContext(Context);

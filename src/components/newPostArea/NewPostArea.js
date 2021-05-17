@@ -15,6 +15,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { useAuth } from '../../context/Context';
+import { useStorage } from '../../hooks/useStorage';
 import { db, firebase, firebaseTimestamp } from '../firebase';
 
 
@@ -79,65 +80,39 @@ const NewPostArea = () => {
   const [image, setImage] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(false);
 
-  useEffect(() => {
+  /* useEffect(() => {
     if (uploadProgress === 100) {
       setIsImageLoaded(true);
       setLoadingImage(false);
     }
     if (uploadProgress > 0 && uploadProgress < 100) setLoadingImage(true);
-  }, [uploadProgress]) 
+  }, [uploadProgress])  */
   
   const handleUploadImage = (event) => {
     const image = event.target.files[0];
     
     if (image && allowedFileTypes.includes(image.type)) {
       setImageUploadError(false);
+      setIsImageLoaded(true);
       setImage(image);
     } else {
       setImageUploadError(true);
+      setIsImageLoaded(false);
     }
   };
+
+  // Llamar a useStorage
 
   const handleCreatePost = (event) => {
     event.preventDefault();
     setIsImageLoaded(false);
-    setFile(image);
-    createPost(textPostRef.current.value, imageUrl, createdAt);
+    /* createPost(textPostRef.current.value, imageUrl, createdAt);
     textPostRef.current.value = '';
-    textPostRef.current.focused = false;
-    setTimeout(() => setIsImageLoaded(false), 3000)
+    textPostRef.current.focused = false; */
   };
 
 
-  const useStorage = () => {
-    const [file, setFile] = useState(null);
-    const [uploadProgress, setUploadProgress] = useState(0);
-    const [imageUrl, setImageUrl] = useState(null);
-    const [createdAt, setCreatedAt] = useState(null);
-   
-    useEffect(() => {
-      if (file) {
-        const storageRef = storage.ref(file.name);
-        const collectionRef = db.collection('images');
-        storageRef.put(file).on('state_changed', (snap) => {
-          let percentage = (snap.bytesTransferred / snap.totalBytes) * 100;
-          setUploadProgress(percentage);
-        }, (err) => {
-          console.error(err);
-        }, async () => {
-          const url = await storageRef.getDownloadURL();
-          const createdAt = firebaseTimestamp();
-          await collectionRef.add({url, createdAt});
-          setImageUrl(url);
-          setCreatedAt(createdAt);
-        });
-      }
-    }, [file]);
-    console.log(imageUrl, createdAt)
-    return {uploadProgress, imageUrl, setFile, createdAt};
-  };
-
-
+  /* 
   // Create Post
 
   const createPost = (text, imageUrl, createdAt) => {
@@ -150,7 +125,7 @@ const NewPostArea = () => {
                 post
               })
             })
-  };
+  }; */
 
   const handleCloseFileErrorMessage = () => {
     setImageUploadError(false);
