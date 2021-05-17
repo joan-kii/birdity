@@ -15,8 +15,8 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { useAuth } from '../../context/Context';
-import { useStorage } from '../../hooks/useStorage';
-import { db, firebase, firebaseTimestamp } from '../firebase';
+import useStorage from '../../hooks/useStorage';
+import { db, firestore } from '../../firebase';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
   },
   checkIcon: {
     marginLeft: theme.spacing(3),
-    marginRight: theme.spacing(3),
+    marginRight: theme.spacing(2.7),
     top: theme.spacing(1),
   },
   inputFile: {
@@ -73,20 +73,35 @@ const NewPostArea = () => {
 
   const { currentUser } = useAuth();
   const textPostRef = useRef();
-  const [loadingImage, setLoadingImage] = useState(false);
   const [disableUpload, setDisableUpload] = useState(true);
+  const [image, setImage] = useState(null);
+  const { uploadProgress, imageUrl, createdAt, setFile } = useStorage(null);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [imageUploadError, setImageUploadError] = useState(false);
-  const [image, setImage] = useState(null);
-  const [uploadProgress, setUploadProgress] = useState(false);
+  const [loadingImage, setLoadingImage] = useState(false);
 
-  /* useEffect(() => {
+  useEffect(() => {
     if (uploadProgress === 100) {
-      setIsImageLoaded(true);
       setLoadingImage(false);
     }
     if (uploadProgress > 0 && uploadProgress < 100) setLoadingImage(true);
-  }, [uploadProgress])  */
+  }, [uploadProgress])
+
+  useEffect(() => {
+    async function createPost() {
+      const post = {text: textPostRef.current.value, imageUrl, createdAt};
+      await db.collection('users')
+        .doc(currentUser.uid)
+        .update({
+          posts: firestore.FieldValue.arrayUnion({
+            post
+          })
+        })
+      textPostRef.current.value = '';
+      textPostRef.current.focused = false;
+    }
+    if (imageUrl && createdAt) createPost();
+  }, [imageUrl, createdAt, currentUser.uid])
   
   const handleUploadImage = (event) => {
     const image = event.target.files[0];
@@ -101,27 +116,20 @@ const NewPostArea = () => {
     }
   };
 
-  // Llamar a useStorage
-
-  const handleCreatePost = (event) => {
+  const handleCreatePost = async function(event) {
     event.preventDefault();
     setIsImageLoaded(false);
-    /* createPost(textPostRef.current.value, imageUrl, createdAt);
-    textPostRef.current.value = '';
-    textPostRef.current.focused = false; */
+    setFile(image);
   };
 
-
-  /* 
   // Create Post
 
-  const createPost = (text, imageUrl, createdAt) => {
+  /* function createPost(text) {
     const post = {text, imageUrl, createdAt};
-    console.log(post)
     return db.collection('users')
             .doc(currentUser.uid)
             .update({
-              posts: firebase.firestore.FieldValue.arrayUnion({
+              posts: app.firestore.FieldValue.arrayUnion({
                 post
               })
             })
