@@ -30,10 +30,7 @@ const ContextProvider = (props) => {
       }).then(function() {
         setSignInError(false);
         return db.collection('users').doc(credentials.user.uid).set({
-          name: credentials.user.displayName,
-          posts: [],
-          gallery: [],
-          comments: []
+          name: credentials.user.displayName
         });
       });
     }).catch(() => {
@@ -46,10 +43,7 @@ const ContextProvider = (props) => {
     return auth.signInWithPopup(provider).then((credentials) => {
       setSignInError(false);
       return db.collection('users').doc(credentials.user.uid).set({
-        name: credentials.user.displayName,
-        posts: [],
-        gallery: [],
-        comments: []
+        name: credentials.user.displayName
       });
     }).catch(() => {
       setSignInError(true);
@@ -62,10 +56,7 @@ const ContextProvider = (props) => {
     return auth.signInWithPopup(provider).then((credentials) => {
       setSignInError(false);
       return db.collection('users').doc(credentials.user.uid).set({
-        name: credentials.user.displayName,
-        posts: [],
-        gallery: [],
-        comments: []
+        name: credentials.user.displayName
       });
     }).catch(() => {
       setSignInError(true);
@@ -77,10 +68,7 @@ const ContextProvider = (props) => {
     return auth.signInWithPopup(provider).then((credentials) => {
       setSignInError(false);
       return db.collection('users').doc(credentials.user.uid).set({
-        name: credentials.user.displayName,
-        posts: [],
-        gallery: [],
-        comments: []
+        name: credentials.user.displayName
       });
     }).catch(() => {
       setSignInError(true);

@@ -75,7 +75,7 @@ const NewPostArea = () => {
   const textPostRef = useRef();
   const [disableUpload, setDisableUpload] = useState(true);
   const [image, setImage] = useState(null);
-  const { uploadProgress, imageUrl, createdAt, setFile } = useStorage(null);
+  const { uploadProgress, imageUrl, setFile } = useStorage(null);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [imageUploadError, setImageUploadError] = useState(false);
   const [loadingImage, setLoadingImage] = useState(false);
@@ -89,19 +89,28 @@ const NewPostArea = () => {
 
   useEffect(() => {
     async function createPost() {
-      const post = {text: textPostRef.current.value, imageUrl, createdAt};
+      const post = {text: textPostRef.current.value, 
+        imageUrl, createdAt: firestore.FieldValue.serverTimestamp()};
       await db.collection('users')
         .doc(currentUser.uid)
-        .update({
-          posts: firestore.FieldValue.arrayUnion({
-            post
+        .collection('posts')
+        .add({
+            posts: post
           })
-        })
       textPostRef.current.value = '';
       textPostRef.current.focused = false;
     }
-    if (imageUrl && createdAt) createPost();
-  }, [imageUrl, createdAt, currentUser.uid])
+    if (imageUrl) createPost();
+  }, [imageUrl])
+
+  useEffect(() => {
+    if (currentUser) {
+      setDisableUpload(false);
+    } else {
+    setIsImageLoaded(false);
+    setDisableUpload(true);
+    }
+  }, [currentUser])
   
   const handleUploadImage = (event) => {
     const image = event.target.files[0];
@@ -122,31 +131,9 @@ const NewPostArea = () => {
     setFile(image);
   };
 
-  // Create Post
-
-  /* function createPost(text) {
-    const post = {text, imageUrl, createdAt};
-    return db.collection('users')
-            .doc(currentUser.uid)
-            .update({
-              posts: app.firestore.FieldValue.arrayUnion({
-                post
-              })
-            })
-  }; */
-
   const handleCloseFileErrorMessage = () => {
     setImageUploadError(false);
   };
-
-  useEffect(() => {
-    if (currentUser) {
-      setDisableUpload(false);
-    } else {
-    setIsImageLoaded(false);
-    setDisableUpload(true);
-    }
-  }, [currentUser])
 
   return (
     <div className={classes.root}>
@@ -214,9 +201,9 @@ const NewPostArea = () => {
             </Grid>
           </Grid>
           {loadingImage &&
-          <LinearProgress
-          className={classes.linearProgress}
-            value={uploadProgress} />}
+            <LinearProgress
+              className={classes.linearProgress}
+              value={uploadProgress} />}
           {disableUpload && 
           <Alert 
             severity='info'

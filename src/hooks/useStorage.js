@@ -6,7 +6,6 @@ const useStorage = () => {
   const [file, setFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [imageUrl, setImageUrl] = useState(null);
-  const [createdAt, setCreatedAt] = useState(null);
    
   useEffect(() => {
     async function storageImage() {
@@ -20,15 +19,13 @@ const useStorage = () => {
         }, async () => {
           const url = await storageRef.getDownloadURL();
           const created = firebaseTimestamp();
-          console.log(created)
           collectionRef.add({url, created});
           setImageUrl(url);
-          setCreatedAt(created);
         });
       }
       if (file) storageImage();
     }, [file]);
-    return {uploadProgress, imageUrl, createdAt, setFile};
+    return {uploadProgress, imageUrl, setFile};
   };
 
   export default useStorage;
