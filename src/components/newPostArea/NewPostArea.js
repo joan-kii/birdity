@@ -18,7 +18,6 @@ import { useAuth } from '../../context/Context';
 import useStorage from '../../hooks/useStorage';
 import { db, firebaseTimestamp } from '../../firebase';
 
-
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -59,6 +58,8 @@ const useStyles = makeStyles((theme) => ({
   linearProgress: {
     width: theme.spacing(30),
     margin: 'auto',
+    height: theme.spacing(2),
+    borderRadius: theme.spacing(1),
   },
   logInAlert: {
     width: theme.spacing(27),
@@ -78,6 +79,7 @@ const NewPostArea = () => {
   const [shrinkTextField, setShrinkTextField] = useState();
   const [image, setImage] = useState(null);
   const [textPost, setTextPost] = useState('');
+  const [posting, setPosting] = useState(false);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [imageUploadError, setImageUploadError] = useState(false);
   const [loadingImage, setLoadingImage] = useState(false);
@@ -104,10 +106,11 @@ const NewPostArea = () => {
       setTextPost('');
       setIsImageLoaded(false);
       setShrinkTextField(false);
+      setPosting(false);
     }
-    if (imageUrl || textPost) createPost();
+    if (posting || imageUrl) createPost();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [imageUrl, textPost])
+  }, [posting, imageUrl])
 
   useEffect(() => {
     if (currentUser) {
@@ -133,8 +136,12 @@ const NewPostArea = () => {
 
   const handleCreatePost = (event) => {
     event.preventDefault();
-    setFile(image);
     setTextPost(textPostRef.current.value);
+    if (!image) {
+      setPosting(true); 
+    } else {
+      setFile(image);
+    }
   };
 
   const handleCloseFileErrorMessage = () => {
@@ -164,7 +171,8 @@ const NewPostArea = () => {
                 placeholder='Max. 150 chars.'
                 disabled={disableUpload}
                 onFocus={() => setShrinkTextField(true)}
-                onBlur={() => setShrinkTextField(false)}
+                onBlur={textPostRef.value === '' ? 
+                  setShrinkTextField(false) : null}
                 InputLabelProps={{shrink: shrinkTextField}}
                 inputProps={{maxLength: 150}}
                 multiline
@@ -208,10 +216,9 @@ const NewPostArea = () => {
               </Button>
             </Grid>
           </Grid>
-          {loadingImage &&
+          {(posting || loadingImage) &&
             <LinearProgress
-              className={classes.linearProgress}
-              value={uploadProgress} />}
+              className={classes.linearProgress} />}
           {disableUpload && 
           <Alert 
             severity='info'

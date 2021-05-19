@@ -25,7 +25,7 @@ const useStorage = () => {
       }
       if (file) storageImage();
     }, [file]);
-    return {uploadProgress, imageUrl, setFile};
+    return {uploadProgress, setUploadProgress, imageUrl, setFile};
   };
 
   export default useStorage;
