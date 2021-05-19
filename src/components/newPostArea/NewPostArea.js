@@ -16,7 +16,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { useAuth } from '../../context/Context';
 import useStorage from '../../hooks/useStorage';
-import { db, firestore } from '../../firebase';
+import { db, firebaseTimestamp } from '../../firebase';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -73,9 +73,11 @@ const NewPostArea = () => {
 
   const { currentUser } = useAuth();
   const textPostRef = useRef();
-  const [disableUpload, setDisableUpload] = useState(true);
-  const [image, setImage] = useState(null);
   const { uploadProgress, imageUrl, setFile } = useStorage(null);
+  const [disableUpload, setDisableUpload] = useState(true);
+  const [shrinkTextField, setShrinkTextField] = useState();
+  const [image, setImage] = useState(null);
+  const [textPost, setTextPost] = useState('');
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [imageUploadError, setImageUploadError] = useState(false);
   const [loadingImage, setLoadingImage] = useState(false);
@@ -89,8 +91,8 @@ const NewPostArea = () => {
 
   useEffect(() => {
     async function createPost() {
-      const post = {text: textPostRef.current.value, 
-        imageUrl, createdAt: firestore.FieldValue.serverTimestamp()};
+      const post = {text: textPost,
+        imageUrl, createdAt: firebaseTimestamp()};
       await db.collection('users')
         .doc(currentUser.uid)
         .collection('posts')
@@ -99,9 +101,13 @@ const NewPostArea = () => {
           })
       textPostRef.current.value = '';
       textPostRef.current.focused = false;
+      setTextPost('');
+      setIsImageLoaded(false);
+      setShrinkTextField(false);
     }
-    if (imageUrl) createPost();
-  }, [imageUrl])
+    if (imageUrl || textPost) createPost();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [imageUrl, textPost])
 
   useEffect(() => {
     if (currentUser) {
@@ -125,10 +131,10 @@ const NewPostArea = () => {
     }
   };
 
-  const handleCreatePost = async function(event) {
+  const handleCreatePost = (event) => {
     event.preventDefault();
-    setIsImageLoaded(false);
     setFile(image);
+    setTextPost(textPostRef.current.value);
   };
 
   const handleCloseFileErrorMessage = () => {
@@ -157,7 +163,9 @@ const NewPostArea = () => {
                 label='Create a Post'
                 placeholder='Max. 150 chars.'
                 disabled={disableUpload}
-                InputLabelProps={{shrink: true}}
+                onFocus={() => setShrinkTextField(true)}
+                onBlur={() => setShrinkTextField(false)}
+                InputLabelProps={{shrink: shrinkTextField}}
                 inputProps={{maxLength: 150}}
                 multiline
                 rowsMax={4} />
