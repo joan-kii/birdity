@@ -77,7 +77,7 @@ const Topbar = () => {
   const [showLogOutAlert, setShowLogOutAlert] = useState(false);
 
   const handleSignUp = () => {
-    setOpenSignUpForm(true);
+    setOpenLogInForm(true);
   };
 
   const handleCloseSignUpForm = () => {

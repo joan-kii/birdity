@@ -93,8 +93,12 @@ const NewPostArea = () => {
 
   useEffect(() => {
     async function createPost() {
-      const post = {text: textPost,
-        imageUrl, createdAt: firebaseTimestamp()};
+      const post = {
+        text: textPost,
+        imageUrl, 
+        createdAt: firebaseTimestamp(),
+        likes: 0,
+      };
       await db.collection('users')
         .doc(currentUser.uid)
         .collection('posts')

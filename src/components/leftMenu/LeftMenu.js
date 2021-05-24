@@ -9,6 +9,10 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary';
 import BookIcon from '@material-ui/icons/Book';
+import Typography from '@material-ui/core/Typography';
+import PersonIcon from '@material-ui/icons/Person';
+
+import { useAuth } from '../../context/Context';
 
 const drawerWidth = 340;
 
@@ -23,16 +27,39 @@ const useStyles = makeStyles((theme) => ({
   icon: {
     color: theme.palette.primary.dark,
   },
+  userName: {
+    color: theme.palette.primary.dark,
+    fontSize: theme.spacing(2.5),
+    cursor: 'default',
+  },
+  userIcon: {
+    color: theme.palette.primary.dark,
+    marginRight: theme.spacing(2),
+  },
 })); 
 
 const LeftMenu = () => {
 
   const classes = useStyles();
 
+  const { currentUser } = useAuth();
+  console.log(currentUser)
+
   return (
     <Drawer variant='permanent'className={classes.drawer}>
       <Toolbar />
       <List>
+      {currentUser &&
+        <ListItem divider>
+          <PersonIcon 
+          fontSize='large'
+          className={classes.userIcon} />
+          <Typography 
+            variant='h4' 
+            className={classes.userName}>
+            {currentUser.displayName}
+          </Typography>
+        </ListItem>}
         <ListItem button key='My Birds'>
           <ListItemIcon>
             <PhotoLibraryIcon className={classes.icon} />
