@@ -43,7 +43,6 @@ const LeftMenu = () => {
   const classes = useStyles();
 
   const { currentUser } = useAuth();
-  console.log(currentUser)
 
   return (
     <Drawer variant='permanent'className={classes.drawer}>
