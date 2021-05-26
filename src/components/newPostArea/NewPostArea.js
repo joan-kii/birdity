@@ -16,7 +16,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { useAuth } from '../../context/Context';
 import useStorage from '../../hooks/useStorage';
-import { db, firebaseTimestamp } from '../../firebase';
+import { db, firebaseTimestamp, firestore } from '../../firebase';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -97,14 +97,17 @@ const NewPostArea = () => {
         text: textPost,
         imageUrl, 
         createdAt: firebaseTimestamp(),
+        comments: [],
         likes: 0,
       };
-      await db.collection('users')
-        .doc(currentUser.uid)
-        .collection('posts')
-        .add({
-            posts: post
-          })
+      await db.collection('posts')
+        .add(post).then((docRef) => {
+          db.collection('users')
+          .doc(currentUser.uid)
+          .update({'posts': firestore.FieldValue.arrayUnion(docRef)})
+        }).catch((err) => {
+          console.error(currentUser.uid, err)
+        });
       textPostRef.current.value = '';
       textPostRef.current.focused = false;
       setTextPost('');

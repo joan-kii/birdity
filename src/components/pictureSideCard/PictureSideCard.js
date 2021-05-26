@@ -65,8 +65,8 @@ const PictureSideCard = () => {
      {loadingImage ?
        <CircularProgress 
          className={classes.loadingCircle}
-         size='5rem'
-         thickness='3' /> :
+         size='3rem'
+         thickness={4} /> :
        <CardMedia 
          className={classes.picture}
          image={randomPic.current} 
