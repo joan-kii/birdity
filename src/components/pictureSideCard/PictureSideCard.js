@@ -23,7 +23,18 @@ const useStyles = makeStyles((theme) => ({
   }, 
   cardTitle: {
     margin: 'auto',
-  }
+  },
+  loadingCircle: {
+    margin: 'auto',
+    marginBottom: theme.spacing(2),
+    color: theme.palette.primary.light,
+  },
+  picture: {
+    maxWidth: theme.spacing(40),
+    margin: 'auto',
+    borderRadius: theme.spacing(0.5),
+    marginBottom: theme.spacing(2),
+  },
 }));
 
 const PictureSideCard = () => {
@@ -39,7 +50,6 @@ const PictureSideCard = () => {
       setLoadingImage(false);
     }
   }, [docs])
-  console.log(randomPic.current)
   
   return (
     <Card className={classes.card}>
@@ -53,9 +63,14 @@ const PictureSideCard = () => {
        </Typography>
      </CardContent>
      {loadingImage ?
-       <CircularProgress /> :
-       <CardMedia image={randomPic.current}/>
-     }
+       <CircularProgress 
+         className={classes.loadingCircle}
+         size='5rem'
+         thickness='3' /> :
+       <CardMedia 
+         className={classes.picture}
+         image={randomPic.current} 
+         component='img' /> }
     </Card>
   )
 };
