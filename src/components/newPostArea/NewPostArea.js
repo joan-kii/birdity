@@ -99,6 +99,7 @@ const NewPostArea = () => {
         createdAt: firebaseTimestamp(),
         comments: [],
         likes: 0,
+        userName: currentUser.displayName,
       };
       await db.collection('posts')
         .add(post).then((docRef) => {
