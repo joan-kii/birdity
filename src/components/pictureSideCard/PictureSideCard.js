@@ -13,10 +13,11 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    maxWidth: theme.spacing(50),
+    maxWidth: theme.spacing(70),
     maxHeight: theme.spacing(50),
-    marginTop: theme.spacing(-21),
-    marginLeft: theme.spacing(155),
+    marginTop: theme.spacing(10),
+    marginRight: theme.spacing(7),
+    padding: theme.spacing(2),
   },
   text: {
     color: theme.palette.primary.light,
@@ -30,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.light,
   },
   picture: {
-    maxWidth: theme.spacing(40),
+    maxWidth: theme.spacing(45),
     margin: 'auto',
     borderRadius: theme.spacing(0.5),
     marginBottom: theme.spacing(2),

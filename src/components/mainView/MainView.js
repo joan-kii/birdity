@@ -1,11 +1,26 @@
 import React, { useEffect } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 
 import NewPostArea from '../newPostArea/NewPostArea';
 import PostCard from '../postCard/PostCard';
 import { db } from '../../firebase';
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    marginTop: theme.spacing(9),
+    marginLeft: theme.spacing(40),
+    padding: theme.spacing(1),
+    width: theme.spacing(110),
+  }, 
+}))
+
 
 const MainView = () => {
+
+  const classes = useStyles();
 
   const posts = [];
 
@@ -13,22 +28,21 @@ const MainView = () => {
     db.collection('posts').get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
         posts.push(doc.data());
-        console.log(posts[0].userName)
       })
     })
   })
 
   return (
-    <>
+    <div className={classes.root}>
       <NewPostArea />  
-      {posts.length !== 0 && 
-        <PostCard 
-          userName={posts[0].userName}
-          createdAt={posts[0].createdAt}
-          imageUrl={posts[0].imageUrl}
-          likes={posts[0].likes}
-          comments={posts[0].comments} />}
-    </>
+      <PostCard 
+        userName='joankii'
+        createdAt='today'
+        imageUrl='https://firebasestorage.googleapis.com/v0/b/birdity-624f7.appspot.com/o/bird_1.jpg?alt=media&token=4297c35a-74de-43ce-8000-d390c1ad3c66'
+        text='What is this beauty I saw on my bike ride today?'
+        likes='10'
+        comments={[]} />
+    </div>
   )
 };
 

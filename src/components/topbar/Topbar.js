@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
   },
   appBar: {
+    position: 'fixed',
     zIndex: theme.zIndex.drawer + 1,
     boxShadow: 'none',
     borderBottom: 'solid 1px #e0e0e0',

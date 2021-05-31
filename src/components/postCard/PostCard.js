@@ -10,18 +10,24 @@ import CardActions from '@material-ui/core/CardActions';
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+/* import ExpandLessIcon from '@material-ui/icons/ExpandLess'; */
 import Badge from '@material-ui/core/Badge';
 import { makeStyles } from '@material-ui/core/styles';  
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
-    maxWidth: 500,
-  }
-});
+    width: '100%',
+    marginTop: theme.spacing(2),
+  },
+  picture: {
+    maxWidth: theme.spacing(80),
+    margin: 'auto',
+    borderRadius: theme.spacing(0.5),
+    marginBottom: theme.spacing(2),
+  },
+}));
 
 const PostCard = (props) => {
-  console.log(props)
 
   const classes = useStyles();
 
@@ -30,6 +36,7 @@ const PostCard = (props) => {
   const imageUrl = props.imageUrl;
   const text = props.text;
   const likes = props.likes;
+  /* const comments = props.comments; */
 
   return (
     <Card className={classes.root}>
@@ -42,10 +49,12 @@ const PostCard = (props) => {
         subheader={createdAt}>
       </CardHeader>
       <CardMedia
-        image={imageUrl} />
+        image={imageUrl}
+        className={classes.picture}
+        component='img' />
       <CardContent>
         <Typography 
-          variant='body'
+          variant='body1'
           color='textSecondary'
           component='p'>
           {text}
@@ -61,7 +70,7 @@ const PostCard = (props) => {
         <IconButton
           aria-label='comments'>
           <Typography
-            variant='body'
+            variant='body2'
             color='textSecondary'
             component='p'>
             Comments

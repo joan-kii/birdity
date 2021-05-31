@@ -19,14 +19,11 @@ import useStorage from '../../hooks/useStorage';
 import { db, firebaseTimestamp, firestore } from '../../firebase';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
+  container: {
     display: 'flex',
     justifyContent: 'space-between',
-    marginTop: theme.spacing(2),
-    marginLeft: theme.spacing(50),
-    padding: theme.spacing(1),
     '& > *': {
-      width: theme.spacing(100),
+      width: '100%',
       height: theme.spacing(20),
     },
   },
@@ -157,7 +154,7 @@ const NewPostArea = () => {
   };
 
   return (
-    <div className={classes.root}>
+    <div className={classes.container}>
       <Paper elevation={3}>
         <form onSubmit={handleCreatePost}>
           <Grid 
