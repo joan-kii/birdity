@@ -11,12 +11,13 @@ import useFirestore from '../../hooks/useFirestore';
 const useStyles = makeStyles((theme) => ({
   card: {
     display: 'flex',
+    position: 'fixed',
     flexDirection: 'column',
     justifyContent: 'center',
     maxWidth: theme.spacing(70),
     maxHeight: theme.spacing(50),
     marginTop: theme.spacing(10),
-    marginRight: theme.spacing(7),
+    marginLeft: theme.spacing(155),
     padding: theme.spacing(2),
   },
   text: {
