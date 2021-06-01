@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
 import NewPostArea from '../newPostArea/NewPostArea';
 import PostCard from '../postCard/PostCard';
 import { db } from '../../firebase';
+import { CircularProgress } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,6 +16,10 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
     width: theme.spacing(110),
   }, 
+  progress: {
+    margin: 'auto',
+    marginTop: theme.spacing(10),
+  },
 }))
 
 
@@ -22,26 +27,48 @@ const MainView = () => {
 
   const classes = useStyles();
 
+  const [arePostsLoaded, setArePostsLoaded] = useState(false);
   const posts = [];
+  let userName = useRef();
+  let createdAt = useRef();
+  let imageUrl = useRef();
+  let text = useRef();
+  let likes = useRef();
+  let comments = useRef();
 
   useEffect(() => {
-    db.collection('posts').get().then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        posts.push(doc.data());
+    async function getPosts() {
+      await db.collection('posts').get().then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          posts.push(doc.data());
+          userName.current = posts[0].userName;
+          createdAt.current = posts[0].createdAt;
+          imageUrl.current = posts[0].imageUrl;
+          text.current = posts[0].text;
+          likes.current = posts[0].likes;
+          comments.current = posts[0].comments;
+          setArePostsLoaded(true);
+        })
       })
-    })
-  })
+    }
+    getPosts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
 
   return (
     <div className={classes.root}>
       <NewPostArea />  
-      <PostCard 
-        userName='joankii'
-        createdAt='today'
-        imageUrl='https://firebasestorage.googleapis.com/v0/b/birdity-624f7.appspot.com/o/bird_1.jpg?alt=media&token=4297c35a-74de-43ce-8000-d390c1ad3c66'
-        text='What is this beauty I saw on my bike ride today?'
-        likes='10'
-        comments={[]} />
+      {arePostsLoaded ? 
+        <PostCard 
+          userName={userName.current}
+          /* createdAt={createdAt.current} */
+          imageUrl={imageUrl.current}
+          text={text.current}
+          likes={likes.current}
+          comments={comments.current} /> :
+        <CircularProgress 
+          className={classes.progress}/>}
     </div>
   )
 };

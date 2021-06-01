@@ -119,7 +119,7 @@ const PostCard = (props) => {
           onClick={handleLikes}>
           <Badge badgeContent={likes}>
             <FavoriteIcon 
-              color={isLiked ? 'error' : 'default'} />
+              color={isLiked ? 'error' : 'disabled'} />
           </Badge>
         </IconButton>
         <IconButton
