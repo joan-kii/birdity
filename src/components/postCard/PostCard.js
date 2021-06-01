@@ -54,6 +54,9 @@ const useStyles = makeStyles((theme) => ({
   commentButton: {
     marginTop: theme.spacing(1),
   },
+  commentCard: {
+    marginBottom: theme.spacing(2),
+  }
 }));
 
 const PostCard = (props) => {
@@ -66,7 +69,7 @@ const PostCard = (props) => {
   const imageUrl = props.imageUrl;
   const text = props.text;
   const likes = props.likes;
-  /* const comments = props.comments; */
+  const comments = props.comments;
   
   const [isLiked, setIsLiked] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -161,22 +164,26 @@ const PostCard = (props) => {
           </Grid>
         </Paper>
         <Divider />
-        <CardHeader 
-          avatar= {
-            <Avatar>
-              <AccountCircleIcon />
-            </Avatar>}
-          title='joankuu'
-          subheader='One day ago'>
-        </CardHeader>
-        <CardContent>
-          <Typography 
-            paragraph
-            color='textSecondary'>
-            That's an amazing photo!!!
-          </Typography>
-        </CardContent>
-        <Divider />
+        {comments.map((comment) => {
+          return <Card className={classes.commentCard}>
+            <CardHeader 
+              avatar={
+                <Avatar>
+                  <AccountCircleIcon />
+                </Avatar>}
+              title={comment.userName}
+              subheader={comment.createdAt.toDate().toLocaleDateString()}>
+            </CardHeader>
+              <CardContent>
+                <Typography 
+                  paragraph
+                  color='textSecondary'>
+                  {comment.comment}
+                </Typography>
+              </CardContent>
+              <Divider />
+          </Card>
+        })}
       </Collapse>
     </Card>
   )

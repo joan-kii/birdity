@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
 import NewPostArea from '../newPostArea/NewPostArea';
@@ -29,46 +29,36 @@ const MainView = () => {
 
   const [arePostsLoaded, setArePostsLoaded] = useState(false);
   const posts = [];
-  let userName = useRef();
-  let createdAt = useRef();
-  let imageUrl = useRef();
-  let text = useRef();
-  let likes = useRef();
-  let comments = useRef();
-
+  
   useEffect(() => {
     async function getPosts() {
       await db.collection('posts').get().then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           posts.push(doc.data());
-          userName.current = posts[0].userName;
-          createdAt.current = posts[0].createdAt;
-          imageUrl.current = posts[0].imageUrl;
-          text.current = posts[0].text;
-          likes.current = posts[0].likes;
-          comments.current = posts[0].comments;
-          setArePostsLoaded(true);
         })
       })
+      setArePostsLoaded(true);
     }
     getPosts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-
+  
   return (
     <div className={classes.root}>
       <NewPostArea />  
-      {arePostsLoaded ? 
-        <PostCard 
-          userName={userName.current}
-          /* createdAt={createdAt.current} */
-          imageUrl={imageUrl.current}
-          text={text.current}
-          likes={likes.current}
-          comments={comments.current} /> :
+      {arePostsLoaded ?
+        posts.map((post) => {
+          console.log(post)
+          return <PostCard 
+            userName={post.userName}
+            createdAt={post.createdAt.toDate().toLocaleDateString()}
+            imageUrl={post.imageUrl}
+            text={post.text}
+            likes={post.likes}
+            comments={post.comments} /> 
+        }) : 
         <CircularProgress 
-          className={classes.progress}/>}
+          className={classes.progress} />}
     </div>
   )
 };
