@@ -22,7 +22,7 @@ import Divider from '@material-ui/core/Divider';
 import { makeStyles } from '@material-ui/core/styles';  
 
 import { useAuth } from '../../context/Context';
-/* import { db } from '../../firebase'; */
+import { db, firestore } from '../../firebase';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -70,8 +70,8 @@ const PostCard = (docRef) => {
   const createdAt = post.createdAt.toDate().toLocaleDateString();
   const imageUrl = post.imageUrl;
   const text = post.text;
-  const likes = post.likes;
-  const comments = post.comments;
+  let likes = post.likes;
+  let comments = useRef();
   
   const [isLiked, setIsLiked] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -85,8 +85,24 @@ const PostCard = (docRef) => {
     }
   }, [currentUser])
   
-  const handleLikes = () => {
-    setIsLiked(!isLiked);
+  const handleLikes = async () => {
+    if (!isLiked) {
+      await db.collection('posts').doc(docRef.docRef.id).update({
+        likes: firestore.FieldValue.increment(1)
+      }).then(() => {
+        setIsLiked(!isLiked);
+      })
+    } else {
+      await db.collection('posts').doc(docRef.docRef.id).update({
+        likes: firestore.FieldValue.increment(-1)
+      }).then(() => {
+        setIsLiked(!isLiked);
+      })
+    }
+    await db.collection('posts').doc(docRef.docRef.id).get().then((doc) => {
+      likes = doc.data().likes
+      console.log(likes)
+    });
   };
 
   const handleExpand = () => {
@@ -168,7 +184,7 @@ const PostCard = (docRef) => {
           </Grid>
         </Paper>
         <Divider />
-        {comments.map((comment, index) => {
+        {/* {comments.current.map((comment, index) => {
           return <Card 
             key={index}
             className={classes.commentCard}>
@@ -189,7 +205,7 @@ const PostCard = (docRef) => {
               </CardContent>
               <Divider />
           </Card>
-        })}
+        })} */}
       </Collapse>
     </Card>
   )
