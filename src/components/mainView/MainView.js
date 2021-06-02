@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
 
 import NewPostArea from '../newPostArea/NewPostArea';
 import PostCard from '../postCard/PostCard';
 import { db } from '../../firebase';
-import { CircularProgress } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,6 +37,8 @@ const MainView = () => {
         querySnapshot.forEach((documentReference) => {
           posts.push(documentReference);
         })
+      }).catch((err) => {
+        console.error(err);
       });
       renderPosts.current = posts.map((docRef, index) => {
         return <PostCard 

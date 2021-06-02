@@ -22,7 +22,7 @@ import Divider from '@material-ui/core/Divider';
 import { makeStyles } from '@material-ui/core/styles';  
 
 import { useAuth } from '../../context/Context';
-import { db, firestore } from '../../firebase';
+import { db, firebaseTimestamp, firestore } from '../../firebase';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -70,8 +70,11 @@ const PostCard = (docRef) => {
   const createdAt = post.createdAt.toDate().toLocaleDateString();
   const imageUrl = post.imageUrl;
   const text = post.text;
-  let likes = post.likes;
-  let comments = useRef();
+  const [likes, setLikes] = useState(post.likes);
+  const [comments, setComments] = useState(post.comments);
+
+  const textCommentRef = useRef();
+  const [textComment, setTextComment] = useState('');
   
   const [isLiked, setIsLiked] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -84,6 +87,24 @@ const PostCard = (docRef) => {
       setIsDisabled(true);
     }
   }, [currentUser])
+
+  useEffect(() => {
+    async function createComment() {
+      const comment = {
+        'comment': textComment, 
+        'createdAt': firebaseTimestamp(), 
+        'userName': currentUser.displayName
+      };
+      await db.collection('posts')
+        .doc(docRef.docRef.id)
+        .set({'comments': firestore.FieldValue.arrayUnion(comment)})
+        .catch((err) => {
+        console.error(err);
+      })
+    }
+    if (textComment !== '') createComment();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [textComment])
   
   const handleLikes = async () => {
     if (!isLiked) {
@@ -91,22 +112,32 @@ const PostCard = (docRef) => {
         likes: firestore.FieldValue.increment(1)
       }).then(() => {
         setIsLiked(!isLiked);
+      }).catch((err) => {
+        console.error(err);
       })
     } else {
       await db.collection('posts').doc(docRef.docRef.id).update({
         likes: firestore.FieldValue.increment(-1)
       }).then(() => {
         setIsLiked(!isLiked);
+      }).catch((err) => {
+        console.error(err);
       })
     }
     await db.collection('posts').doc(docRef.docRef.id).get().then((doc) => {
-      likes = doc.data().likes
-      console.log(likes)
+      setLikes(doc.data().likes);
+    }).catch((err) => {
+      console.error(err);
     });
   };
 
   const handleExpand = () => {
     setIsExpanded(!isExpanded);
+  };
+
+  const handleCreateComment = (event) => {
+    event.preventDefault();
+    setTextComment(textCommentRef.current.value);
   };
 
   return (
@@ -163,28 +194,32 @@ const PostCard = (docRef) => {
         unmountOnExit>
         <Paper
           elevation={3}>
-          <Grid 
-            container
-            className={classes.commentField}>
-            <Grid item>
-              <TextField 
-              label={isDisabled ? 'Please, login to comment' : 'Write a comment'} 
-              placeholder='Max. 150 chars.'
-              disabled={isDisabled} />
+          <form onSubmit={handleCreateComment}>
+            <Grid 
+              container
+              className={classes.commentField}>
+              <Grid item>
+                <TextField 
+                inputRef={textCommentRef}
+                label={isDisabled ? 'Please, login to comment' : 'Write a comment'} 
+                placeholder='Max. 150 chars.'
+                disabled={isDisabled} />
+              </Grid>
+              <Grid item>
+                <Button
+                  variant='contained'
+                  color='primary'
+                  className={classes.commentButton}
+                  startIcon={<ChatBubbleOutlineIcon />}
+                  type='submit'>
+                  Comment
+                </Button>
+              </Grid>
             </Grid>
-            <Grid item>
-              <Button
-                variant='contained'
-                color='primary'
-                className={classes.commentButton}
-                startIcon={<ChatBubbleOutlineIcon />}>
-                Comment
-              </Button>
-            </Grid>
-          </Grid>
+          </form>
         </Paper>
         <Divider />
-        {/* {comments.current.map((comment, index) => {
+        {comments.map((comment, index) => {
           return <Card 
             key={index}
             className={classes.commentCard}>
@@ -205,7 +240,7 @@ const PostCard = (docRef) => {
               </CardContent>
               <Divider />
           </Card>
-        })} */}
+        })}
       </Collapse>
     </Card>
   )
