@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Card from '@material-ui/core/Card'; 
 import CardHeader from '@material-ui/core/CardHeader';
 import Avatar from '@material-ui/core/Avatar';
@@ -22,6 +22,7 @@ import Divider from '@material-ui/core/Divider';
 import { makeStyles } from '@material-ui/core/styles';  
 
 import { useAuth } from '../../context/Context';
+/* import { db } from '../../firebase'; */
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -59,30 +60,23 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const PostCard = (props) => {
+const PostCard = (docRef) => {
 
   const { currentUser } = useAuth();
   const classes = useStyles();
   
-  const userName = props.userName;
-  const createdAt = props.createdAt;
-  const imageUrl = props.imageUrl;
-  const text = props.text;
-  const likes = props.likes;
-  const comments = props.comments;
+  const post = docRef.docRef.data();
+  const userName = post.userName;
+  const createdAt = post.createdAt.toDate().toLocaleDateString();
+  const imageUrl = post.imageUrl;
+  const text = post.text;
+  const likes = post.likes;
+  const comments = post.comments;
   
   const [isLiked, setIsLiked] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
-
-  const handleLikes = () => {
-    setIsLiked(!isLiked);
-  };
-
-  const handleExpand = () => {
-    setIsExpanded(!isExpanded);
-  };
-
+  
   useEffect(() => {
     if (currentUser) {
       setIsDisabled(false);
@@ -90,6 +84,14 @@ const PostCard = (props) => {
       setIsDisabled(true);
     }
   }, [currentUser])
+  
+  const handleLikes = () => {
+    setIsLiked(!isLiked);
+  };
+
+  const handleExpand = () => {
+    setIsExpanded(!isExpanded);
+  };
 
   return (
     <Card className={classes.root}>
@@ -120,7 +122,9 @@ const PostCard = (props) => {
         <IconButton 
           aria-label='likes'
           onClick={handleLikes}>
-          <Badge badgeContent={likes}>
+          <Badge 
+            badgeContent={likes}
+            showZero>
             <FavoriteIcon 
               color={isLiked ? 'error' : 'disabled'} />
           </Badge>
@@ -164,8 +168,10 @@ const PostCard = (props) => {
           </Grid>
         </Paper>
         <Divider />
-        {comments.map((comment) => {
-          return <Card className={classes.commentCard}>
+        {comments.map((comment, index) => {
+          return <Card 
+            key={index}
+            className={classes.commentCard}>
             <CardHeader 
               avatar={
                 <Avatar>

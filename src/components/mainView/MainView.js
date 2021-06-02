@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
 import NewPostArea from '../newPostArea/NewPostArea';
@@ -28,15 +28,20 @@ const MainView = () => {
   const classes = useStyles();
 
   const [arePostsLoaded, setArePostsLoaded] = useState(false);
-  const posts = [];
+  let renderPosts = useRef();
   
   useEffect(() => {
+    const posts = [];
     async function getPosts() {
       await db.collection('posts').get().then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          posts.push(doc.data());
+        querySnapshot.forEach((documentReference) => {
+          posts.push(documentReference);
         })
-      })
+      });
+      renderPosts.current = posts.map((docRef, index) => {
+        return <PostCard 
+          key={index}
+          docRef={docRef} />})
       setArePostsLoaded(true);
     }
     getPosts();
@@ -46,19 +51,9 @@ const MainView = () => {
   return (
     <div className={classes.root}>
       <NewPostArea />  
-      {arePostsLoaded ?
-        posts.map((post) => {
-          console.log(post)
-          return <PostCard 
-            userName={post.userName}
-            createdAt={post.createdAt.toDate().toLocaleDateString()}
-            imageUrl={post.imageUrl}
-            text={post.text}
-            likes={post.likes}
-            comments={post.comments} /> 
-        }) : 
+      {arePostsLoaded ? renderPosts.current : 
         <CircularProgress 
-          className={classes.progress} />}
+           className={classes.progress} />}
     </div>
   )
 };
