@@ -1,4 +1,5 @@
 import React from 'react';
+import { HashRouter as Router, Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
@@ -59,19 +60,23 @@ const LeftMenu = () => {
             {currentUser.displayName}
           </Typography>
         </ListItem>}
-        <ListItem button key='My Birds'>
-          <ListItemIcon>
-            <PhotoLibraryIcon className={classes.icon} />
-          </ListItemIcon>
-          <ListItemText primary='My Birds' className={classes.text} />
-        </ListItem> 
+        <Router>
+          <ListItem button key='My Birds'>
+            <ListItemIcon>
+              <PhotoLibraryIcon className={classes.icon} />
+            </ListItemIcon>
+            <ListItemText primary='My Birds' className={classes.text} />
+          </ListItem> 
 
-        <ListItem button key='My Comments'>
-          <ListItemIcon>
-            <BookIcon className={classes.icon} />
-          </ListItemIcon>
-          <ListItemText primary='My Comments' className={classes.text} />
-        </ListItem> 
+          <Link to='/posts' style={{ textDecoration: 'none' }}>
+            <ListItem button key='My Posts'>
+              <ListItemIcon>
+                <BookIcon className={classes.icon} />
+              </ListItemIcon>
+              <ListItemText primary='My Posts' className={classes.text} />
+            </ListItem> 
+          </Link>
+        </Router>
       </List>
       <Divider />
       <ListItem button key='AboutUs'>

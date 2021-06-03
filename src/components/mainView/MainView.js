@@ -1,9 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
+import { 
+  HashRouter as Router, 
+  Route, 
+  Switch 
+} from 'react-router-dom';
 
 import NewPostArea from '../newPostArea/NewPostArea';
 import PostCard from '../postCard/PostCard';
+import UserPosts from '../userPosts/UserPosts';
 import { db } from '../../firebase';
 import { Context } from '../../context/Context';
 
@@ -55,10 +61,19 @@ const MainView = () => {
   
   return (
     <div className={classes.root}>
-      <NewPostArea />  
-      {arePostsLoaded ? renderPosts : 
-        <CircularProgress 
-           className={classes.progress} />}
+      <Router>
+        <Switch>
+          <Route exact path='/'>
+            <NewPostArea />  
+            {arePostsLoaded ? renderPosts : 
+              <CircularProgress 
+                className={classes.progress} />}
+          </Route>
+          <Route exact path='/posts'>
+            <UserPosts />
+          </Route>
+        </Switch>
+      </Router>
     </div>
   )
 };
