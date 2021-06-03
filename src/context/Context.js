@@ -19,6 +19,7 @@ const ContextProvider = (props) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [signInError, setSignInError] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [reRenderPosts, setReRenderPosts] = useState(false);
 
   // Sign Up Functions
 
@@ -110,6 +111,7 @@ const ContextProvider = (props) => {
     setSignInError, 
     googleSignUp, facebookSignUp,
     twitterSignUp, logout, login,
+    reRenderPosts, setReRenderPosts,
   };
 
   return (

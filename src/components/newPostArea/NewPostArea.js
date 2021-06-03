@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import Paper from '@material-ui/core/Paper';
 import Alert from '@material-ui/lab/Alert';
 import TextField from '@material-ui/core/TextField';
@@ -14,7 +14,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { useAuth } from '../../context/Context';
+import { useAuth, Context } from '../../context/Context';
 import useStorage from '../../hooks/useStorage';
 import { db, firebaseTimestamp, firestore } from '../../firebase';
 
@@ -76,10 +76,11 @@ const NewPostArea = () => {
   const [shrinkTextField, setShrinkTextField] = useState();
   const [image, setImage] = useState(null);
   const [textPost, setTextPost] = useState('');
-  const [posting, setPosting] = useState(false);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [imageUploadError, setImageUploadError] = useState(false);
   const [loadingImage, setLoadingImage] = useState(false);
+  const [posting, setPosting] = useState(false);
+  const { setReRenderPosts } = useContext(Context);
 
   useEffect(() => {
     if (uploadProgress === 100) {
@@ -112,6 +113,7 @@ const NewPostArea = () => {
       setIsImageLoaded(false);
       setShrinkTextField(false);
       setPosting(false);
+      setReRenderPosts(true);
     }
     if (posting || imageUrl) createPost();
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -22,7 +22,7 @@ import Divider from '@material-ui/core/Divider';
 import { makeStyles } from '@material-ui/core/styles';  
 
 import { useAuth } from '../../context/Context';
-import { db, firebaseTimestamp, firestore } from '../../firebase';
+import { db, firestore } from '../../firebase';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -66,12 +66,12 @@ const PostCard = (docRef) => {
   const classes = useStyles();
   
   const post = docRef.docRef.data();
+  const [likes, setLikes] = useState(post.likes);
+  const [comments, setComments] = useState(post.comments);
   const userName = post.userName;
   const createdAt = post.createdAt.toDate().toLocaleDateString();
   const imageUrl = post.imageUrl;
   const text = post.text;
-  const [likes, setLikes] = useState(post.likes);
-  const [comments, setComments] = useState(post.comments);
 
   const textCommentRef = useRef();
   const [textComment, setTextComment] = useState('');
@@ -92,15 +92,23 @@ const PostCard = (docRef) => {
     async function createComment() {
       const comment = {
         'comment': textComment, 
-        'createdAt': firebaseTimestamp(), 
+        'createdAt': new Date().toLocaleDateString(), 
         'userName': currentUser.displayName
       };
       await db.collection('posts')
         .doc(docRef.docRef.id)
-        .set({'comments': firestore.FieldValue.arrayUnion(comment)})
+        .update({'comments': [...comments, comment]})
         .catch((err) => {
         console.error(err);
       })
+      textCommentRef.current.value = '';
+      textCommentRef.current.focused = false;
+      setTextComment('');
+      await db.collection('posts').doc(docRef.docRef.id).get().then((doc) => {
+        setComments(doc.data().comments);
+      }).catch((err) => {
+        console.error(err);
+      });
     }
     if (textComment !== '') createComment();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -219,7 +227,7 @@ const PostCard = (docRef) => {
           </form>
         </Paper>
         <Divider />
-        {comments.map((comment, index) => {
+        {(comments.length !== 0) && comments.map((comment, index) => {
           return <Card 
             key={index}
             className={classes.commentCard}>
@@ -229,7 +237,7 @@ const PostCard = (docRef) => {
                   <AccountCircleIcon />
                 </Avatar>}
               title={comment.userName}
-              subheader={comment.createdAt.toDate().toLocaleDateString()}>
+              subheader={comment.createdAt}>
             </CardHeader>
               <CardContent>
                 <Typography 

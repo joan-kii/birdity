@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
 
 import NewPostArea from '../newPostArea/NewPostArea';
 import PostCard from '../postCard/PostCard';
 import { db } from '../../firebase';
+import { Context } from '../../context/Context';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,7 +29,8 @@ const MainView = () => {
   const classes = useStyles();
 
   const [arePostsLoaded, setArePostsLoaded] = useState(false);
-  let renderPosts = useRef();
+  const [renderPosts, setRenderPosts] = useState();
+  const { reRenderPosts, setReRenderPosts } = useContext(Context);
   
   useEffect(() => {
     const posts = [];
@@ -40,20 +42,21 @@ const MainView = () => {
       }).catch((err) => {
         console.error(err);
       });
-      renderPosts.current = posts.map((docRef, index) => {
+      setRenderPosts(posts.map((docRef, index) => {
         return <PostCard 
           key={index}
-          docRef={docRef} />})
+          docRef={docRef} />}))
+      setReRenderPosts(false);
       setArePostsLoaded(true);
     }
     getPosts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [reRenderPosts])
   
   return (
     <div className={classes.root}>
       <NewPostArea />  
-      {arePostsLoaded ? renderPosts.current : 
+      {arePostsLoaded ? renderPosts : 
         <CircularProgress 
            className={classes.progress} />}
     </div>
