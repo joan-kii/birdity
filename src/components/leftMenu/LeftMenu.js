@@ -9,6 +9,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary';
+import DynamicFeedIcon from '@material-ui/icons/DynamicFeed';
 import BookIcon from '@material-ui/icons/Book';
 import Typography from '@material-ui/core/Typography';
 import PersonIcon from '@material-ui/icons/Person';
@@ -61,12 +62,22 @@ const LeftMenu = () => {
           </Typography>
         </ListItem>}
         <Router>
+          <Link to='/' style={{ textDecoration: 'none' }}>
+            <ListItem button key='Home'>
+              <ListItemIcon>
+                <DynamicFeedIcon className={classes.icon} />
+              </ListItemIcon>
+              <ListItemText primary='Home' className={classes.text} />
+            </ListItem> 
+          </Link>
+
           <ListItem button key='My Birds'>
             <ListItemIcon>
               <PhotoLibraryIcon className={classes.icon} />
             </ListItemIcon>
             <ListItemText primary='My Birds' className={classes.text} />
           </ListItem> 
+
 
           <Link to='/posts' style={{ textDecoration: 'none' }}>
             <ListItem button key='My Posts'>

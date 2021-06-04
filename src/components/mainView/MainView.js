@@ -51,7 +51,7 @@ const MainView = () => {
       setRenderPosts(posts.map((docRef, index) => {
         return <PostCard 
           key={index}
-          docRef={docRef} />}))
+          docRef={docRef} />}));
       setReRenderPosts(false);
       setArePostsLoaded(true);
     }

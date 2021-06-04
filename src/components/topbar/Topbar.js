@@ -1,8 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react';
+import { HashRouter as Router, Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import ChatIcon from '@material-ui/icons/Chat';
@@ -110,60 +110,64 @@ const Topbar = () => {
     <div className={classes.grow}>
       <AppBar position='static' className={classes.appBar}>
         <Toolbar className={classes.topbar}>
-          <div className={classes.leftSide}>
-            <Typography component={Link} className={classes.logo} to={'/'}>
-              Birdity
-            </Typography>
-            <Typography 
-              variant='body2' 
-              component='h1' 
-              className={classes.slogan}>
-              The Birdwatching Social Network
-            </Typography>
-          </div>
-          <div className={classes.rightSide}>
-            <Button
-              data-testid='chatButton'
-              variant='contained'
-              color='primary'
-              startIcon={<ChatIcon />}
-              className={classes.button}>
-              <Typography>
-                Chat
+          <Router>
+            <div className={classes.leftSide}>
+              <Link to={'/'} style={{textDecoration: 'none'}}>
+                <Typography className={classes.logo} >
+                  Birdity
+                </Typography>
+              </Link>
+              <Typography 
+                variant='body2' 
+                component='h1' 
+                className={classes.slogan}>
+                The Birdwatching Social Network
               </Typography>
-            </Button>
-            <Button
-              data-testid='exploreButton'
-              variant='contained'
-              color='primary'
-              startIcon={<ExploreIcon />}
-              className={classes.button}>
-              <Typography>
-                Explore
-              </Typography>
-            </Button>
-            {currentUser ? 
-            <Button
-              data-testid='logoutButton'
-              variant='contained'
-              color='primary'
-              startIcon={<ExitToAppIcon />}
-              onClick={handleLogOut}
-              >
-              Log Out
-            </Button> : 
-            <Button
-              data-testid='loginButton'
-              variant='contained'
-              color='primary'
-              startIcon={<AccountBoxIcon />}
-              className={classes.button}
-              onClick={handleSignUp}>
-              <Typography>
-                Sign Up / Log In
-              </Typography>
-            </Button>}
-          </div>
+            </div>
+            <div className={classes.rightSide}>
+              <Button
+                data-testid='chatButton'
+                variant='contained'
+                color='primary'
+                startIcon={<ChatIcon />}
+                className={classes.button}>
+                <Typography>
+                  Chat
+                </Typography>
+              </Button>
+              <Button
+                data-testid='exploreButton'
+                variant='contained'
+                color='primary'
+                startIcon={<ExploreIcon />}
+                className={classes.button}>
+                <Typography>
+                  Explore
+                </Typography>
+              </Button>
+              {currentUser ? 
+              <Button
+                data-testid='logoutButton'
+                variant='contained'
+                color='primary'
+                startIcon={<ExitToAppIcon />}
+                onClick={handleLogOut}
+                >
+                Log Out
+              </Button> : 
+              <Button
+                data-testid='loginButton'
+                variant='contained'
+                color='primary'
+                startIcon={<AccountBoxIcon />}
+                className={classes.button}
+                onClick={handleSignUp}>
+                <Typography>
+                  Sign Up / Log In
+                </Typography>
+              </Button>}
+            </div>
+          </Router>
         </ Toolbar>
       </ AppBar>
       <Modal
