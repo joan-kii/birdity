@@ -10,6 +10,7 @@ import {
 import NewPostArea from '../newPostArea/NewPostArea';
 import PostCard from '../postCard/PostCard';
 import UserPosts from '../userPosts/UserPosts';
+import BirdsGallery from '../birdsGallery/BirdsGallery';
 import { db } from '../../firebase';
 import { Context } from '../../context/Context';
 
@@ -58,7 +59,7 @@ const MainView = () => {
     getPosts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reRenderPosts])
-  
+
   return (
     <div className={classes.root}>
       <Router>
@@ -71,6 +72,9 @@ const MainView = () => {
           </Route>
           <Route exact path='/posts'>
             <UserPosts />
+          </Route>
+          <Route exact path='/birds'>
+            <BirdsGallery />
           </Route>
         </Switch>
       </Router>

@@ -71,13 +71,14 @@ const LeftMenu = () => {
             </ListItem> 
           </Link>
 
-          <ListItem button key='My Birds'>
-            <ListItemIcon>
-              <PhotoLibraryIcon className={classes.icon} />
-            </ListItemIcon>
-            <ListItemText primary='My Birds' className={classes.text} />
-          </ListItem> 
-
+          <Link to='/birds' style={{ textDecoration: 'none' }}>
+            <ListItem button key='My Birds'>
+              <ListItemIcon>
+                <PhotoLibraryIcon className={classes.icon} />
+              </ListItemIcon>
+              <ListItemText primary='My Birds' className={classes.text} />
+            </ListItem> 
+          </Link>
 
           <Link to='/posts' style={{ textDecoration: 'none' }}>
             <ListItem button key='My Posts'>

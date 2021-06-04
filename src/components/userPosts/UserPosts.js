@@ -37,8 +37,10 @@ const UserPosts = () => {
       {arePostsLoaded ? userPostRefs.map((docRef, index) => {
         return <PostCard key={index} docRef={docRef} />}) :
         <CircularProgress 
-          style={{margin: '35%',
-                  marginTop: '25%',}} />
+          style={{
+            margin: '35%',
+            marginTop: '25%'
+          }} />
       }
     </div>
   )
