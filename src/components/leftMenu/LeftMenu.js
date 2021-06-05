@@ -92,9 +92,13 @@ const LeftMenu = () => {
             </Link>
           </List>
           <Divider />
-          <ListItem button key='AboutUs'>
-            <ListItemText primary='About Us' className={classes.text} />
-          </ListItem>
+
+          <Link to='/about' style={{ textDecoration: 'none' }}>
+            <ListItem button key='AboutUs'>
+              <ListItemText primary='About Us' className={classes.text} />
+            </ListItem>
+          </Link>
+
       </Router>
     </Drawer>
   )

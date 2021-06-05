@@ -4,8 +4,8 @@ import '@testing-library/jest-dom/extend-expect';
 
 import UserProfile from './../UserProfile';
 
-describe('LeftMenu Component', () => {
-  test('left menu renders fine', () => {
+describe('UserProfile Component', () => {
+  test('user profile renders fine', () => {
     render(<UserProfile />);
   });
 

@@ -12,6 +12,7 @@ import PostCard from '../postCard/PostCard';
 import UserPosts from '../userPosts/UserPosts';
 import BirdsGallery from '../birdsGallery/BirdsGallery';
 import UserProfile from '../userProfile/UserProfile';
+import AboutUs from '../aboutUs/AboutUs';
 import { db } from '../../firebase';
 import { Context } from '../../context/Context';
 
@@ -78,6 +79,9 @@ const MainView = () => {
             <BirdsGallery />
           </Route><Route exact path='/profile'>
             <UserProfile />
+          </Route>
+          <Route exact path='/about'>
+            <AboutUs />
           </Route>
         </Switch>
       </Router>
