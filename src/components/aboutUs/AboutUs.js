@@ -1,8 +1,6 @@
 import React from 'react';
 import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -38,14 +36,14 @@ const AboutUs = () => {
       </Typography>
       <Typography 
         className={classes.text}
-        component='body1'
+        variant='body1'
         align='justify'
         paragraph>
         This is just a fake social network for bird lovers like exercise at The Odin Project. It is made using React, React Router, Material-UI, and Firebase. It also has a simple chat implemented and makes use of a bird tracking API.
       </Typography>
       <Typography 
         className={classes.text}
-        component='body1'
+        variant='body1'
         align='justify'
         paragraph>
         If you are interested in learning web development, I highly recommend <a href='https://theodinproject.com' target='_blank' rel='noreferrer'>The Odin Project</a>. You can see my slow but steady progress in the web development journey on my <a href='https://github.com/joan-kii?tab=repositories' target='_blank' rel='noreferrer'>Github</a>.

@@ -72,24 +72,25 @@ const LeftMenu = () => {
                 <ListItemText primary='Home' className={classes.text} />
               </ListItem> 
             </Link>
+            {currentUser &&
+              <Link to='/birds' style={{ textDecoration: 'none' }}>
+                <ListItem button key='My Birds'>
+                  <ListItemIcon>
+                    <PhotoLibraryIcon className={classes.icon} />
+                  </ListItemIcon>
+                  <ListItemText primary='My Birds' className={classes.text} />
+                </ListItem> 
+              </Link>}
 
-            <Link to='/birds' style={{ textDecoration: 'none' }}>
-              <ListItem button key='My Birds'>
-                <ListItemIcon>
-                  <PhotoLibraryIcon className={classes.icon} />
-                </ListItemIcon>
-                <ListItemText primary='My Birds' className={classes.text} />
-              </ListItem> 
-            </Link>
-
-            <Link to='/posts' style={{ textDecoration: 'none' }}>
-              <ListItem button key='My Posts'>
-                <ListItemIcon>
-                  <BookIcon className={classes.icon} />
-                </ListItemIcon>
-                <ListItemText primary='My Posts' className={classes.text} />
-              </ListItem> 
-            </Link>
+            {currentUser &&
+              <Link to='/posts' style={{ textDecoration: 'none' }}>
+                <ListItem button key='My Posts'>
+                  <ListItemIcon>
+                    <BookIcon className={classes.icon} />
+                  </ListItemIcon>
+                  <ListItemText primary='My Posts' className={classes.text} />
+                </ListItem> 
+              </Link>}
           </List>
           <Divider />
 

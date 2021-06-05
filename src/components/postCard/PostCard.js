@@ -176,6 +176,7 @@ const PostCard = (docRef) => {
         className={classes.actions}>
         <IconButton 
           aria-label='likes'
+          disabled={isDisabled}
           onClick={handleLikes}>
           <Badge 
             badgeContent={likes}
@@ -219,7 +220,9 @@ const PostCard = (docRef) => {
                   color='primary'
                   className={classes.commentButton}
                   startIcon={<ChatBubbleOutlineIcon />}
-                  type='submit'>
+                  type='submit'
+                  disabled={isDisabled}
+                  >
                   Comment
                 </Button>
               </Grid>
