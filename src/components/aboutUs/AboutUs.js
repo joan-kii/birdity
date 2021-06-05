@@ -39,7 +39,7 @@ const AboutUs = () => {
         variant='body1'
         align='justify'
         paragraph>
-        This is just a fake social network for bird lovers like exercise at The Odin Project. It is made using React, React Router, Material-UI, and Firebase. It also has a simple chat implemented and makes use of a bird tracking API.
+        This is just a fake social network for bird lovers like a web app exercise at The Odin Project. It is made using React, React Router, Material-UI, and Firebase. It also has a simple chat implemented and makes use of a bird tracking API.
       </Typography>
       <Typography 
         className={classes.text}
