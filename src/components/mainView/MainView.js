@@ -11,6 +11,7 @@ import NewPostArea from '../newPostArea/NewPostArea';
 import PostCard from '../postCard/PostCard';
 import UserPosts from '../userPosts/UserPosts';
 import BirdsGallery from '../birdsGallery/BirdsGallery';
+import UserProfile from '../userProfile/UserProfile';
 import { db } from '../../firebase';
 import { Context } from '../../context/Context';
 
@@ -75,6 +76,8 @@ const MainView = () => {
           </Route>
           <Route exact path='/birds'>
             <BirdsGallery />
+          </Route><Route exact path='/profile'>
+            <UserProfile />
           </Route>
         </Switch>
       </Router>

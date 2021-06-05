@@ -32,7 +32,6 @@ const useStyles = makeStyles((theme) => ({
   userName: {
     color: theme.palette.primary.dark,
     fontSize: theme.spacing(2.5),
-    cursor: 'default',
   },
   userIcon: {
     color: theme.palette.primary.dark,
@@ -49,51 +48,54 @@ const LeftMenu = () => {
   return (
     <Drawer variant='permanent'className={classes.drawer}>
       <Toolbar />
-      <List>
-      {currentUser &&
-        <ListItem divider>
-          <PersonIcon 
-          fontSize='large'
-          className={classes.userIcon} />
-          <Typography 
-            variant='h4' 
-            className={classes.userName}>
-            {currentUser.displayName}
-          </Typography>
-        </ListItem>}
-        <Router>
-          <Link to='/' style={{ textDecoration: 'none' }}>
-            <ListItem button key='Home'>
-              <ListItemIcon>
-                <DynamicFeedIcon className={classes.icon} />
-              </ListItemIcon>
-              <ListItemText primary='Home' className={classes.text} />
-            </ListItem> 
-          </Link>
+      <Router>
+        <List>
+        {currentUser &&
+          <Link to='/profile' style={{ textDecoration: 'none' }}>
+            <ListItem divider>
+              <PersonIcon 
+              fontSize='large'
+              className={classes.userIcon} />
+              <Typography 
+                variant='h4' 
+                className={classes.userName}>
+                {currentUser.displayName}
+              </Typography>
+            </ListItem>
+          </Link>}
+          
+            <Link to='/' style={{ textDecoration: 'none' }}>
+              <ListItem button key='Home'>
+                <ListItemIcon>
+                  <DynamicFeedIcon className={classes.icon} />
+                </ListItemIcon>
+                <ListItemText primary='Home' className={classes.text} />
+              </ListItem> 
+            </Link>
 
-          <Link to='/birds' style={{ textDecoration: 'none' }}>
-            <ListItem button key='My Birds'>
-              <ListItemIcon>
-                <PhotoLibraryIcon className={classes.icon} />
-              </ListItemIcon>
-              <ListItemText primary='My Birds' className={classes.text} />
-            </ListItem> 
-          </Link>
+            <Link to='/birds' style={{ textDecoration: 'none' }}>
+              <ListItem button key='My Birds'>
+                <ListItemIcon>
+                  <PhotoLibraryIcon className={classes.icon} />
+                </ListItemIcon>
+                <ListItemText primary='My Birds' className={classes.text} />
+              </ListItem> 
+            </Link>
 
-          <Link to='/posts' style={{ textDecoration: 'none' }}>
-            <ListItem button key='My Posts'>
-              <ListItemIcon>
-                <BookIcon className={classes.icon} />
-              </ListItemIcon>
-              <ListItemText primary='My Posts' className={classes.text} />
-            </ListItem> 
-          </Link>
-        </Router>
-      </List>
-      <Divider />
-      <ListItem button key='AboutUs'>
-        <ListItemText primary='About Us' className={classes.text} />
-      </ListItem>
+            <Link to='/posts' style={{ textDecoration: 'none' }}>
+              <ListItem button key='My Posts'>
+                <ListItemIcon>
+                  <BookIcon className={classes.icon} />
+                </ListItemIcon>
+                <ListItemText primary='My Posts' className={classes.text} />
+              </ListItem> 
+            </Link>
+          </List>
+          <Divider />
+          <ListItem button key='AboutUs'>
+            <ListItemText primary='About Us' className={classes.text} />
+          </ListItem>
+      </Router>
     </Drawer>
   )
 };
