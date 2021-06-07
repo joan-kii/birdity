@@ -70,12 +70,17 @@ const Alert = (props) => {
 const Topbar = () => {
 
   const classes = useStyles();
+
   const { openSignUpForm, setOpenSignUpForm, 
     openLogInForm, setOpenLogInForm,
-    signInError, setSignInError } = useContext(Context);
+    signInError, setSignInError, openChat, 
+    setOpenChat } = useContext(Context);
+
   const { currentUser, logout } = useAuth();
+
   const [showLogInAlert, setShowLogInAlert] = useState(false);
   const [showLogOutAlert, setShowLogOutAlert] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(true);
 
   const handleSignUp = () => {
     setOpenLogInForm(true);
@@ -99,8 +104,15 @@ const Topbar = () => {
     setShowLogOutAlert(false);
   };
 
+  const handleOpenChat = () => {
+    setOpenChat(!openChat);
+  }
+
   useEffect(() => {
-    if(currentUser) setShowLogInAlert(true);
+    if(currentUser) {
+      setIsDisabled(false);
+      setShowLogInAlert(true);
+    }
   }, [currentUser])
 
   const renderSignUpForm = (<div><SignUpForm /></div>);
@@ -130,7 +142,9 @@ const Topbar = () => {
                 variant='contained'
                 color='primary'
                 startIcon={<ChatIcon />}
-                className={classes.button}>
+                className={classes.button}
+                disabled={isDisabled}
+                onClick={handleOpenChat}>
                 <Typography>
                   Chat
                 </Typography>

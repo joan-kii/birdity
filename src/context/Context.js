@@ -20,6 +20,7 @@ const ContextProvider = (props) => {
   const [signInError, setSignInError] = useState(false);
   const [loading, setLoading] = useState(true);
   const [reRenderPosts, setReRenderPosts] = useState(false);
+  const [openChat, setOpenChat] = useState(false);
 
   // Sign Up Functions
 
@@ -112,6 +113,7 @@ const ContextProvider = (props) => {
     googleSignUp, facebookSignUp,
     twitterSignUp, logout, login,
     reRenderPosts, setReRenderPosts,
+    openChat, setOpenChat,
   };
 
   return (

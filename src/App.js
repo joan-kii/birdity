@@ -6,6 +6,7 @@ import Topbar from './components/topbar/Topbar';
 import LeftMenu from './components/leftMenu/LeftMenu';
 import MainView from './components/mainView/MainView';
 import PictureSideCard from './components/pictureSideCard/PictureSideCard';
+import Chat from './components/chat/Chat';
 
 const useStyles = makeStyles({
   root: {
@@ -29,6 +30,7 @@ const App = () => {
           <MainView />
           <PictureSideCard />
         </div>
+        <Chat />
       </ContextProvider>
     </>
   );
