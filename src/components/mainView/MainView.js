@@ -32,7 +32,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-
 const MainView = () => {
 
   const classes = useStyles();
