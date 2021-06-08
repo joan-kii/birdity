@@ -8,8 +8,6 @@ import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import MessageIcon from '@material-ui/icons/Message';
 import SendIcon from '@material-ui/icons/Send';
-import Snackbar from '@material-ui/core/Snackbar';
-import Avatar from '@material-ui/core/Avatar';
 import { fade, makeStyles } from '@material-ui/core/styles';
 
 import { Context, useAuth } from '../../context/Context';
@@ -43,9 +41,37 @@ const useStyles = makeStyles((theme) => ({
   },
   chatField: {
     height: '80%',
+    overflowY: 'scroll',
+    display: 'flex',
+    flexDirection: 'column',
+    padding: theme.spacing(0.5),
   },
-  sended: {},
-  received: {},
+  messageUser: {
+    maxWidth: theme.spacing(15),
+    margin: theme.spacing(0, 0.1),
+    lineHeight: theme.spacing(0.2),
+    padding: theme.spacing(0.3, 0),
+    borderRadius: theme.shape.borderRadius,
+  },
+  messageText: {
+    maxWidth: theme.spacing(32),
+    margin: theme.spacing(0, 0.3),
+    lineHeight: theme.spacing(0.2),
+    padding: theme.spacing(0.5),
+  },
+  sended: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+    marginBottom: theme.spacing(0.5),
+    background: '#0b93f6',
+    borderRadius: theme.shape.borderRadius,
+  },
+  received: {
+    display: 'flex',
+    flexDirection: 'column',
+    marginBottom: theme.spacing(0.5),
+  },
   inputField: {
     position: 'relative',
     marginBottom: theme.spacing(2),
@@ -109,50 +135,75 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Chat = () => {
+const ChatMessage = (props) => {
 
   const classes = useStyles();
+  const { currentUser } = useAuth();
+
+  const {text, uid, userName } = props.message;
+  const messageClass = uid === currentUser.uid ? classes.sended : classes.received;
+
+  return (
+    <div className={messageClass}>
+      <p className={classes.messageUser}>{userName} says:</p>
+      <p className={classes.messageText}>{text}</p>
+    </div>
+  )
+};
+
+const Chat = () => {
 
   const { currentUser } = useAuth();
+  const classes = useStyles();
+
   const {openChat, setOpenChat} = useContext(Context);
   const [renderMessages, setRenderMessages] = useState();
+  const [isNewMessage, setIsNewMessage] = useState(true);
 
-  const user = useRef();
   const message = useRef();
+  const messages = useRef();
+  const scroll = useRef();
 
   const handleCloseChat = () => {
     setOpenChat(false);
   };
   
   useEffect(() => {
-    let messages;
-    function getChatMessages() {
-      messages = db.collection('messages')
+    async function getChatMessages() {
+      await db.collection('messages')
               .orderBy('createdAt')
-              .limitToLast(25).get().then((dataSnapshot) => {
-                console.log(dataSnapshot.docChanges())
+              .limitToLast(25).get().then((querySnapshot) => {
+                messages.current = querySnapshot.docs;
               })
-      /* setRenderMessages(messages.map((message, index) => {
-        const messageClass = message.userName === currentUser.displayName ? classes.sended : classes.received;
-        return (
-          <div 
-            key={index}
-            className={messageClass}>
-            <Snackbar
-              message={message.text} />
-            <Avatar>
-              {message.userName}
-            </Avatar>
-          </div>
-          )
-      })) */
+      setRenderMessages(messages.current.map((doc, index) => {
+        const message = doc.data();
+        return <ChatMessage key={index} message={message} />
+      }));
+      setIsNewMessage(false);
     }
-    getChatMessages();
-  }, [])
+    if (isNewMessage) getChatMessages();
+  }, [isNewMessage])
+  
+  useEffect(() => {
+    if (openChat) scroll.current.scrollIntoView({behavior: 'smooth'});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [messages])
 
-const handleSendMessage = () => {
-    if (user) console.log(user.current.value);
-    if (message) console.log(message.current.value);
+const handleSendMessage = async () => {
+    const newMessage = {
+      text: message.current.value,
+      uid: currentUser.uid,
+      userName: currentUser.displayName,
+      createdAt: firebaseTimestamp(),
+    };
+    await db.collection('messages')
+            .add(newMessage)
+            .catch((err) => {
+              console.error(err);
+            })
+    message.current.value = '';
+    message.current.focused = false;
+    setIsNewMessage(true);
   };
 
   return (
@@ -177,6 +228,7 @@ const handleSendMessage = () => {
           </AppBar>
           <div className={classes.chatField}>
             {renderMessages}
+            <span ref={scroll}></span>
           </div>
           <AppBar className={classes.bottomBar}>
             <Toolbar className={classes.toolBar}>
