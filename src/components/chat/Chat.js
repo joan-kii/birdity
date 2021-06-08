@@ -51,7 +51,6 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(0, 0.1),
     lineHeight: theme.spacing(0.2),
     padding: theme.spacing(0.3, 0),
-    borderRadius: theme.shape.borderRadius,
   },
   messageText: {
     maxWidth: theme.spacing(32),
@@ -64,13 +63,27 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     alignItems: 'flex-end',
     marginBottom: theme.spacing(0.5),
-    background: '#0b93f6',
-    borderRadius: theme.shape.borderRadius,
+    '& cite': {
+      background: '#0b93f6',
+      borderRadius: theme.shape.borderRadius,
+    },
+    '& p': {
+      background: '#0b93b8',
+      borderRadius: theme.shape.borderRadius,
+    },
   },
   received: {
     display: 'flex',
     flexDirection: 'column',
     marginBottom: theme.spacing(0.5),
+    '& cite': {
+      background: '#0b9355',
+      borderRadius: theme.shape.borderRadius,
+    },
+    '& p': {
+      background: '#0b93a4',
+      borderRadius: theme.shape.borderRadius,
+    },
   },
   inputField: {
     position: 'relative',
@@ -145,7 +158,7 @@ const ChatMessage = (props) => {
 
   return (
     <div className={messageClass}>
-      <p className={classes.messageUser}>{userName} says:</p>
+      <cite className={classes.messageUser} >{userName} says:</cite>
       <p className={classes.messageText}>{text}</p>
     </div>
   )
