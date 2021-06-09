@@ -226,6 +226,7 @@ const handleSendMessage = async () => {
                 Birdity SuperChat
               </Typography>
               <IconButton 
+                data-testid='closeButton'
                 size='small'
                 className={classes.actionButton}
                 onClick={handleCloseChat}>
@@ -244,6 +245,7 @@ const handleSendMessage = async () => {
                 <MessageIcon />
               </div>
               <InputBase 
+                data-testid='textField'
                 placeholder='Enter Message...'
                 classes={{
                   root: classes.inputRoot,
@@ -253,6 +255,7 @@ const handleSendMessage = async () => {
                 inputRef={message} />
               </div>
               <IconButton 
+                data-testid='sendButton'
                 size='small'
                 className={classes.actionButton}
                 onClick={handleSendMessage}>
