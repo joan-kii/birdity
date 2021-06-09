@@ -6,7 +6,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import ChatIcon from '@material-ui/icons/Chat';
-import ExploreIcon from '@material-ui/icons/Explore';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Modal from '@material-ui/core/Modal'; 
@@ -147,16 +146,6 @@ const Topbar = () => {
                 onClick={handleOpenChat}>
                 <Typography>
                   Chat
-                </Typography>
-              </Button>
-              <Button
-                data-testid='exploreButton'
-                variant='contained'
-                color='primary'
-                startIcon={<ExploreIcon />}
-                className={classes.button}>
-                <Typography>
-                  Explore
                 </Typography>
               </Button>
               {currentUser ? 
