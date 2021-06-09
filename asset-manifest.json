@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.js": "/birdity/static/js/main.c238c7db.chunk.js",
+    "main.js.map": "/birdity/static/js/main.c238c7db.chunk.js.map",
+    "runtime-main.js": "/birdity/static/js/runtime-main.3c4396b6.js",
+    "runtime-main.js.map": "/birdity/static/js/runtime-main.3c4396b6.js.map",
+    "static/js/2.ced5c22b.chunk.js": "/birdity/static/js/2.ced5c22b.chunk.js",
+    "static/js/2.ced5c22b.chunk.js.map": "/birdity/static/js/2.ced5c22b.chunk.js.map",
+    "index.html": "/birdity/index.html",
+    "static/js/2.ced5c22b.chunk.js.LICENSE.txt": "/birdity/static/js/2.ced5c22b.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.3c4396b6.js",
+    "static/js/2.ced5c22b.chunk.js",
+    "static/js/main.c238c7db.chunk.js"
+  ]
+}
