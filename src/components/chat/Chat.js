@@ -165,7 +165,6 @@ const Chat = () => {
 
   const {openChat, setOpenChat} = useContext(Context);
   const [renderMessages, setRenderMessages] = useState();
-  const [isNewMessage, setIsNewMessage] = useState(true);
 
   const message = useRef();
   const messages = useRef();
@@ -186,10 +185,9 @@ const Chat = () => {
         const message = doc.data();
         return <ChatMessage key={index} message={message} />
       }));
-      setIsNewMessage(false);
     }
-    if (isNewMessage) getChatMessages();
-  }, [isNewMessage])
+    getChatMessages();
+  },)
   
   useEffect(() => {
     if (openChat) scroll.current.scrollIntoView({behavior: 'smooth'});
@@ -210,7 +208,6 @@ const handleSendMessage = async () => {
             })
     message.current.value = '';
     message.current.focused = false;
-    setIsNewMessage(true);
   };
 
   return (
