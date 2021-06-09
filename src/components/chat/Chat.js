@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(0.5),
   },
   messageUser: {
-    maxWidth: theme.spacing(15),
+    width: theme.spacing(15),
     margin: theme.spacing(0, 0.1),
     lineHeight: theme.spacing(0.2),
     padding: theme.spacing(0.3, 0),
@@ -57,6 +57,8 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(0, 0.3),
     lineHeight: theme.spacing(0.2),
     padding: theme.spacing(0.5),
+    background: '#f8f5f1',
+    borderRadius: theme.shape.borderRadius,
   },
   sended: {
     display: 'flex',
@@ -64,11 +66,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'flex-end',
     marginBottom: theme.spacing(0.5),
     '& cite': {
-      background: '#0b93f6',
-      borderRadius: theme.shape.borderRadius,
-    },
-    '& p': {
-      background: '#0b93b8',
+      background: '#8fd6e1',
       borderRadius: theme.shape.borderRadius,
     },
   },
@@ -77,11 +75,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     marginBottom: theme.spacing(0.5),
     '& cite': {
-      background: '#0b9355',
-      borderRadius: theme.shape.borderRadius,
-    },
-    '& p': {
-      background: '#0b93a4',
+      background: '#9fe6a0',
       borderRadius: theme.shape.borderRadius,
     },
   },
